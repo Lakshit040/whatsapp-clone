@@ -5,3 +5,8 @@ export const enum Mode {
   Compact,
   Spacious,
 }
+
+export const LOCAL_STORAGE_CONTACT_KEY = 'contacts';
+
+export const DATE_TIME_FORMAT = 'yyyy-MM-dd HH:mm';
+export const LOCAL_STORAGE_MESSAGE_KEY = 'messages';

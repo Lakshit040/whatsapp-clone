@@ -13,11 +13,7 @@ interface CreateEditModalProps {
   messageId?: string;
   editedMessage?: string;
   onContactSave?: (name: string, profileImg: string) => void;
-  onMessageEdit?: (
-    contactId: string,
-    messageId: string,
-    message: string
-  ) => void;
+  onMessageEdit?: (messageId: string, message: string) => void;
   children?: ReactNode;
 }
 
@@ -42,13 +38,13 @@ const CreateEditModal = memo(
 
     const handleModalOpenClose = useCallback(() => {
       setIsOpen((open) => !open);
-    }, [setIsOpen]);
+    }, []);
 
     const handleInputChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
       },
-      [setInput]
+      []
     );
 
     const handleSave = useCallback(() => {
@@ -60,8 +56,8 @@ const CreateEditModal = memo(
         return;
       }
 
-      messageId && contactId
-        ? onMessageEdit?.(contactId, messageId, input)
+      messageId
+        ? onMessageEdit?.(messageId, input)
         : onContactSave?.(input, PROFILE_IMG);
 
       setIsOpen((open) => !open);

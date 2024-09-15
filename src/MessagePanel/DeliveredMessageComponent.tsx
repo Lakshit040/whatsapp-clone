@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useEffect, useRef } from 'react';
 import { useMessages } from '../contexts/MessagesContext';
 
 import UserMessage from './UserMessage';
@@ -11,11 +11,6 @@ const DeliveredMessageComponent = memo(
   ({ contactId }: DeliveredMessageComponentProps) => {
     const { messages, editMessage, deleteMessage } = useMessages();
     const messageContainerRef = useRef<HTMLDivElement>(null);
-
-    const contactMessages = useMemo(
-      () => messages[contactId] ?? [],
-      [messages, contactId]
-    );
 
     useEffect(() => {
       console.log('Rendered DeliveredMessageComponent');
@@ -31,15 +26,15 @@ const DeliveredMessageComponent = memo(
     return (
       <div className='container mx-auto h-full'>
         <div className='h-full overflow-y-auto p-4' ref={messageContainerRef}>
-          {contactMessages.length === 0 && (
+          {messages.length === 0 && (
             <div className='flex justify-center items-center w-full h-full text-xl font-poppins'>
               No Messages Yet
             </div>
           )}
-          {contactMessages.map((message) => (
+          {messages.map((message) => (
             <UserMessage
               key={message.id}
-              contactId={message.contactId}
+              contactId={contactId}
               messageId={message.id}
               text={message.message}
               timestamp={message.timestamp}

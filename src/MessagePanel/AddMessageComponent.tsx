@@ -20,10 +20,9 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
       e.preventDefault();
       if (message.trim() === '') return;
       addMessage(contactId, message.trim());
-
       setMessage('');
     },
-    [message, setMessage, contactId, addMessage]
+    [message, contactId, addMessage]
   );
 
   const handleKeyDown = useCallback(

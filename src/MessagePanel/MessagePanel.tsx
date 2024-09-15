@@ -1,12 +1,12 @@
 import { memo, useCallback, useEffect } from 'react';
-import { useSelectedContact } from '../contexts/SelectedContactContext';
 
 import MessagePanelHeading from './MessagePanelHeading';
 import DeliveredMessageComponent from './DeliveredMessageComponent';
 import AddMessageComponent from './AddMessageComponent';
+import { useMessages } from '../contexts/MessagesContext';
 
 const MessagePanel = memo(() => {
-  const { selectedContact, setSelectedContact } = useSelectedContact();
+  const { selectedContact, setSelectedContact } = useMessages();
 
   useEffect(() => {
     console.log('Renderered MessagePanel');

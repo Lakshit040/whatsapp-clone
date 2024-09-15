@@ -13,8 +13,8 @@ interface UserMessageProps {
   messageId: string;
   text: string;
   timestamp: string;
-  onMessageDelete: (contactId: string, messageId: string) => void;
-  onMessageEdit: (contactId: string, messageId: string, text: string) => void;
+  onMessageDelete: (messageId: string) => void;
+  onMessageEdit: (messageId: string, text: string) => void;
 }
 
 const UserMessage = memo(
@@ -51,11 +51,7 @@ const UserMessage = memo(
               </CreateEditModal>
             </div>
             <div className='absolute hidden group-hover:block right-7 top-0'>
-              <DeleteModal
-                contactId={contactId}
-                messageId={messageId}
-                onDelete={onMessageDelete}
-              >
+              <DeleteModal messageId={messageId} onDelete={onMessageDelete}>
                 <MdDelete
                   className='w-4 h-4 text-gray-400 font-semibold hover:scale-110 rounded-full m-1'
                   title='Delete Message'

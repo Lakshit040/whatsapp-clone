@@ -1,36 +1,39 @@
 import { memo, useCallback, useEffect } from 'react';
 
 import { useMode } from '../contexts/ModeContext';
-import { useSelectedContact } from '../contexts/SelectedContactContext';
 import { type ContactProps } from '../contexts/ContactsContext';
+import { type Message } from '../contexts/MessagesContext';
 
 import { MdDelete } from 'react-icons/md';
 
 import _ from 'lodash';
 import { format } from 'date-fns';
 import { Mode } from '../constants';
-import { type Message } from '../contexts/MessagesContext';
 
 interface ContactComponentProps {
+  isSelected: boolean;
   contact: ContactProps;
-  lastMessage?: Message;
   onDelete: (contactId: string) => void;
+  onClick: (contact: ContactProps) => void;
+  lastMessage?: Message;
 }
 
 const Contact = memo(
-  ({ contact, lastMessage, onDelete }: ContactComponentProps) => {
+  ({
+    isSelected,
+    contact,
+    onDelete,
+    onClick,
+    lastMessage,
+  }: ContactComponentProps) => {
     const { mode } = useMode();
-    const { selectedContact, setSelectedContact } = useSelectedContact();
 
     const handleContactDelete = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
-        onDelete(contact.id)
-
-        if (selectedContact && selectedContact.id === contact.id)
-          setSelectedContact(null);
+        onDelete(contact.id);
       },
-      [onDelete, setSelectedContact, contact.id, selectedContact]
+      [onDelete, contact.id]
     );
 
     useEffect(() => {
@@ -38,14 +41,13 @@ const Contact = memo(
     });
 
     const handleContactClick = useCallback(() => {
-      if (selectedContact && selectedContact.id === contact.id) return;
-      setSelectedContact(contact);
-    }, [setSelectedContact, selectedContact, contact.id]);
+      onClick(contact);
+    }, [contact]);
 
     return (
       <div
         className={`relative flex items-center py-4 px-4 border-b-[.5px] border-gray-600 cursor-pointer group ${
-          selectedContact?.id === contact.id
+          isSelected
             ? 'bg-contact-active border-[.5px] border-green-400 font-semibold'
             : ' bg-contact'
         }`}

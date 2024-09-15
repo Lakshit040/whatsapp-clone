@@ -8,6 +8,10 @@ import React, {
   useState,
 } from 'react';
 import { v4 as getId } from 'uuid';
+import {
+  LOCAL_STORAGE_CONTACT_KEY,
+  LOCAL_STORAGE_MESSAGE_KEY,
+} from '../constants';
 
 export interface ContactProps {
   id: string;
@@ -25,8 +29,6 @@ const ContactContext = createContext<ContactContextProps | undefined>(
   undefined
 );
 
-const LOCAL_STORAGE_CONTACT_KEY = 'contacts';
-
 const saveContactsToStorage = (contacts: ContactProps[]) => {
   localStorage.setItem(LOCAL_STORAGE_CONTACT_KEY, JSON.stringify(contacts));
 };
@@ -34,6 +36,18 @@ const saveContactsToStorage = (contacts: ContactProps[]) => {
 const loadContactsFromStorage = (): ContactProps[] => {
   const contacts = localStorage.getItem(LOCAL_STORAGE_CONTACT_KEY);
   return contacts ? JSON.parse(contacts) : [];
+};
+
+const deleteMessageForContact = (contactId: string) => {
+  const allMessages = localStorage.getItem(LOCAL_STORAGE_MESSAGE_KEY);
+  if (allMessages) {
+    const storedMessages = JSON.parse(allMessages);
+    delete storedMessages[contactId];
+    localStorage.setItem(
+      LOCAL_STORAGE_MESSAGE_KEY,
+      JSON.stringify(storedMessages)
+    );
+  }
 };
 
 export const ContactsProvider: React.FC<{ children: ReactNode }> = ({
@@ -56,11 +70,15 @@ export const ContactsProvider: React.FC<{ children: ReactNode }> = ({
     setContacts((prevContacts) => [newContact, ...prevContacts]);
   }, []);
 
-  const deleteContact = useCallback((contactId: string) => {
-    setContacts((prevContacts) =>
-      prevContacts.filter((contact) => contact.id !== contactId)
-    );
-  }, []);
+  const deleteContact = useCallback(
+    (contactId: string) => {
+      setContacts((prevContacts) =>
+        prevContacts.filter((contact) => contact.id !== contactId)
+      );
+      deleteMessageForContact(contactId);
+    },
+    [deleteMessageForContact]
+  );
 
   const contextValue = useMemo(
     () => ({
