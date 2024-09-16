@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { useMode } from '../contexts/ModeContext';
 
 import { FaCircleUser, FaMessage } from 'react-icons/fa6';
@@ -10,9 +10,7 @@ import { Mode } from '../utils';
 
 const ProfileArea = memo(() => {
   const { mode, toggleMode } = useMode();
-  useEffect(() => {
-    console.log('Rendered ProfileArea');
-  });
+
   return (
     <div className='container mx-auto bg-[#32383b]'>
       <div className='px-5 py-4 flex justify-between items-center'>

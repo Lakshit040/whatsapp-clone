@@ -27,8 +27,6 @@ const UserMessage = memo(
   }: UserMessageProps) => {
     const { mode } = useMode();
 
-    console.log('New Message found: ', text);
-
     return (
       <div className='flex flex-row-reverse container py-2 relative'>
         <div className='flex items-center gap-2 shadow-xl border-[0.5px] border-gray-600 bg-green-700 rounded-lg py-2 px-3 group max-w-lg'>

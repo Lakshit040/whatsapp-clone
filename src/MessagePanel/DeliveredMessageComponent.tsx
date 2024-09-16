@@ -18,10 +18,6 @@ const DeliveredMessageComponent = memo(
     );
 
     useEffect(() => {
-      console.log('Rendered DeliveredMessageComponent');
-    });
-
-    useEffect(() => {
       const container = messageContainerRef.current;
       if (container) {
         container.scrollTop = container.scrollHeight;

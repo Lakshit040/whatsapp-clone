@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback } from 'react';
 import { useMode } from '../contexts/ModeContext';
 import { useSelectedContact } from '../contexts/SelectedContactContext';
 
@@ -32,10 +32,6 @@ const Contact = memo(
       },
       [onDelete, contact.id, selectedContact]
     );
-
-    useEffect(() => {
-      console.log('Rendered Contact Component with name, ', contact.name);
-    });
 
     const handleContactClick = useCallback(() => {
       if (selectedContact && selectedContact.id === contact.id) return;

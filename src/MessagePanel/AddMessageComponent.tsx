@@ -1,4 +1,4 @@
-import { useCallback, useState, memo, useEffect } from 'react';
+import { useCallback, useState, memo } from 'react';
 
 import { IoMdSend } from 'react-icons/io';
 import { useMessages } from '../contexts/MessagesContext';
@@ -10,10 +10,6 @@ interface AddMessageComponentProps {
 const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
   const { addMessage } = useMessages();
   const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    console.log('Rendered AddMessasgeComponent');
-  });
 
   const handleAddMessage = useCallback(
     (e: React.FormEvent) => {

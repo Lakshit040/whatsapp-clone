@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 
 import { IoSearch } from 'react-icons/io5';
 import { RxCross2 } from 'react-icons/rx';
@@ -12,10 +12,6 @@ interface MessagePanelHeadingProps {
 
 const MessagePanelHeading = memo(
   ({ name, profileImg, onChatClose, className }: MessagePanelHeadingProps) => {
-    useEffect(() => {
-      console.log('Rendered MessagePanelHeading with name, ', name);
-    });
-
     return (
       <div
         className={`flex items-center justify-between py-3 px-6 border-gray-600 bg-[#32383b] ${className}`}

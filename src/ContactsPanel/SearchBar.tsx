@@ -1,4 +1,4 @@
-import { useCallback, useState, memo, useEffect } from 'react';
+import { useCallback, useState, memo } from 'react';
 import { useContacts } from '../contexts/ContactsContext';
 import type { Contact } from '../utils';
 
@@ -12,10 +12,6 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
   const [query, setQuery] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<Contact[]>([]);
   const { contacts } = useContacts();
-
-  useEffect(() => {
-    console.log('Rendered SearchBar');
-  });
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState, memo, useEffect } from 'react';
+import { ReactNode, useCallback, useState, memo } from 'react';
 import {
   Button,
   Dialog,
@@ -35,10 +35,6 @@ const CreateEditModal = memo(
 
     const heading = messageId ? 'Edit your message :' : 'Create new Contact :';
     const name = messageId ? 'Edited message' : 'Contact name';
-
-    useEffect(() => {
-      console.log('Rendered CreateEditModal');
-    });
 
     const handleModalOpenClose = useCallback(() => {
       setIsOpen((open) => !open);

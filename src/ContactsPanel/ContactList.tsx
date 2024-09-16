@@ -1,4 +1,4 @@
-import { useCallback, memo, useEffect, useMemo } from 'react';
+import { useCallback, memo, useMemo } from 'react';
 import { useContacts } from '../contexts/ContactsContext';
 import { useMessages } from '../contexts/MessagesContext';
 
@@ -18,10 +18,6 @@ const ContactList = memo(() => {
       })
     );
   }, [messages]);
-
-  useEffect(() => {
-    console.log('Rendered ContactList');
-  });
 
   const handleAddNewContact = useCallback(
     (name: string, profileImg: string) => {

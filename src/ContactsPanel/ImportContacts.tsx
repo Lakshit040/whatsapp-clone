@@ -1,11 +1,8 @@
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { MdPermScanWifi } from 'react-icons/md';
 import { RxCross2 } from 'react-icons/rx';
 
 const ImportContacts = memo(() => {
-  useEffect(() => {
-    console.log('Rendered ImportContacts');
-  });
   return (
     <div className='container mx-auto p-5 bg-[#2e23c9] bg-opacity-80 relative'>
       <div className='flex gap-1'>

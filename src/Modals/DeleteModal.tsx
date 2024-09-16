@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useState, memo, useEffect } from 'react';
+import { ReactNode, useCallback, useState, memo } from 'react';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 interface DeleteModalProps {
@@ -15,10 +15,6 @@ const DeleteModal = memo(
     const heading = messageId
       ? 'Delete this message ?'
       : 'Delete this contact ?';
-
-    useEffect(() => {
-      console.log('Rendered DeleteModal');
-    });
 
     const handleModalOpenClose = useCallback(() => {
       setIsOpen((open) => !open);
