@@ -1,4 +1,4 @@
-import { useCallback, useState, memo } from 'react';
+import { useCallback, useState, memo, FormEvent } from 'react';
 import { useContacts } from '../contexts/ContactsContext';
 import type { Contact } from '../utils';
 
@@ -11,6 +11,7 @@ interface SearchBarProps {
 const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
   const [query, setQuery] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<Contact[]>([]);
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const { contacts } = useContacts();
 
   const handleInputChange = useCallback(
@@ -23,6 +24,7 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
           option.name.toLowerCase().includes(value.toLowerCase())
         );
         setFilteredOptions(filtered);
+        setHighlightedIndex(-1);
       } else {
         setFilteredOptions([]);
       }
@@ -34,13 +36,45 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
     (contact: Contact) => {
       setQuery('');
       setFilteredOptions([]);
+      setHighlightedIndex(-1);
       onContactSelect(contact);
     },
     [onContactSelect]
   );
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'ArrowDown') {
+        setHighlightedIndex((prev) =>
+          prev < filteredOptions.length - 1 ? prev + 1 : 0
+        );
+      } else if (e.key === 'ArrowUp') {
+        setHighlightedIndex((prev) =>
+          prev > 0 ? prev - 1 : filteredOptions.length - 1
+        );
+      } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+        e.preventDefault();
+        handleOptionClick(filteredOptions[highlightedIndex]);
+      }
+    },
+    [filteredOptions, highlightedIndex, handleOptionClick]
+  );
+
+  const handleFormSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if (filteredOptions.length > 0) {
+        handleOptionClick(filteredOptions[0]);
+      }
+    },
+    [filteredOptions, handleOptionClick]
+  );
+
   return (
-    <div className='container mx-auto py-2.5 px-2 w-full border-b-[.5px] border-gray-600 bg-gray-900 bg-opacity-35'>
+    <form
+      onSubmit={handleFormSubmit}
+      className='container mx-auto py-2.5 px-2 w-full border-b-[.5px] border-gray-600 bg-gray-900 bg-opacity-35'
+    >
       <div className='relative bg-gray-700 flex items-center py-2 px-3 rounded-xl'>
         <label
           htmlFor='inputId'
@@ -54,6 +88,7 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
           placeholder='Search or start a new chat'
           value={query}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           className='pl-3 flex-1 bg-gray-700 focus:outline-none placeholder:text-sm placeholder:text-gray-400 font-poppins text-sm'
         />
         {filteredOptions.length > 0 && (
@@ -61,7 +96,9 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
             {filteredOptions.map((option, index) => (
               <li
                 key={index}
-                className='p-2 cursor-pointer hover:bg-gray-600'
+                className={`p-2 cursor-pointer hover:bg-gray-600 ${
+                  highlightedIndex === index ? 'bg-gray-600' : ''
+                }`}
                 onClick={() => handleOptionClick(option)}
               >
                 {option.name}
@@ -70,7 +107,7 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
           </ul>
         )}
       </div>
-    </div>
+    </form>
   );
 });
 
