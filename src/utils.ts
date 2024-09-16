@@ -66,3 +66,10 @@ export const truncateMessage = (message: string) => {
     omission: '...',
   });
 };
+
+export const debounce = <T extends (...args: any[]) => void>(
+  func: T,
+  wait: number
+) => {
+  return _.debounce(func, wait);
+};

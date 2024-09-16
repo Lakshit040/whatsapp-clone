@@ -1,8 +1,9 @@
 import { useCallback, useState, memo, FormEvent } from 'react';
 import { useContacts } from '../contexts/ContactsContext';
-import type { Contact } from '../utils';
+import { debounce, type Contact } from '../utils';
 
 import { SearchButton } from '../icons';
+import FilteredOption from './FilteredOption';
 
 interface SearchBarProps {
   onContactSelect: (contact: Contact) => void;
@@ -14,11 +15,8 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
   const { contacts } = useContacts();
 
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setQuery(value);
-
+  const debouncedFilter = useCallback(
+    debounce((value: string) => {
       if (value) {
         const filtered = contacts.filter((option) =>
           option.name.toLowerCase().includes(value.toLowerCase())
@@ -28,8 +26,17 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
       } else {
         setFilteredOptions([]);
       }
-    },
+    }, 300),
     [contacts]
+  );
+
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setQuery(value);
+      debouncedFilter(value);
+    },
+    [debouncedFilter]
   );
 
   const handleOptionClick = useCallback(
@@ -52,9 +59,16 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
         setHighlightedIndex((prev) =>
           prev > 0 ? prev - 1 : filteredOptions.length - 1
         );
-      } else if (e.key === 'Enter' && highlightedIndex >= 0) {
+      } else if (e.key === 'Enter') {
         e.preventDefault();
-        handleOptionClick(filteredOptions[highlightedIndex]);
+        if (highlightedIndex >= 0) {
+          handleOptionClick(filteredOptions[highlightedIndex]);
+        } else if (debouncedFilter) {
+          debouncedFilter.flush();
+          if (filteredOptions.length > 0) {
+            handleOptionClick(filteredOptions[0]);
+          }
+        }
       }
     },
     [filteredOptions, highlightedIndex, handleOptionClick]
@@ -94,15 +108,12 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
         {filteredOptions.length > 0 && (
           <ul className='absolute top-full left-0 w-full mt-1 bg-gray-700 border border-gray-600 rounded-lg shadow-lg z-10'>
             {filteredOptions.map((option, index) => (
-              <li
-                key={index}
-                className={`p-2 cursor-pointer hover:bg-gray-600 ${
-                  highlightedIndex === index ? 'bg-gray-600' : ''
-                }`}
-                onClick={() => handleOptionClick(option)}
-              >
-                {option.name}
-              </li>
+              <FilteredOption
+                key={option.id}
+                isHighlighted={highlightedIndex === index}
+                option={option}
+                onOptionClick={handleOptionClick}
+              />
             ))}
           </ul>
         )}
