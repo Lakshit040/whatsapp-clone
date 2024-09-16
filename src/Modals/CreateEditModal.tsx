@@ -6,7 +6,7 @@ import {
   DialogTitle,
   Input,
 } from '@headlessui/react';
-import { PROFILE_IMG } from '../constants';
+import { PROFILE_IMG } from '../utils';
 
 interface CreateEditModalProps {
   contactId?: string;
@@ -42,13 +42,13 @@ const CreateEditModal = memo(
 
     const handleModalOpenClose = useCallback(() => {
       setIsOpen((open) => !open);
-    }, [setIsOpen]);
+    }, []);
 
     const handleInputChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
         setInput(event.target.value);
       },
-      [setInput]
+      []
     );
 
     const handleSave = useCallback(() => {
@@ -65,7 +65,7 @@ const CreateEditModal = memo(
         : onContactSave?.(input, PROFILE_IMG);
 
       setIsOpen((open) => !open);
-    }, [input, onContactSave, onMessageEdit, setIsOpen, contactId, messageId]);
+    }, [input, onContactSave, onMessageEdit, contactId, messageId]);
 
     return (
       <>

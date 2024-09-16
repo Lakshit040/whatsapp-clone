@@ -1,13 +1,13 @@
 import { useCallback, memo, useEffect, useMemo } from 'react';
 import { useContacts } from '../contexts/ContactsContext';
+import { useMessages } from '../contexts/MessagesContext';
 
 import Contact from './Contact';
 import CreateEditModal from '../Modals/CreateEditModal';
 import { FaPlus } from 'react-icons/fa';
-import { useMessages } from '../contexts/MessagesContext';
 
 const ContactList = memo(() => {
-  const { contacts, addNewContact, deleteContact } = useContacts();
+  const { contacts, addContact, deleteContact } = useContacts();
   const { messages, clearMessagesForContact } = useMessages();
 
   const lastMessages = useMemo(() => {
@@ -25,9 +25,9 @@ const ContactList = memo(() => {
 
   const handleAddNewContact = useCallback(
     (name: string, profileImg: string) => {
-      addNewContact(name, profileImg);
+      addContact(name, profileImg);
     },
-    [addNewContact]
+    [addContact]
   );
 
   const handleContactDelete = useCallback(

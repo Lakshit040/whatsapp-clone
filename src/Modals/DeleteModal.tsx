@@ -22,12 +22,12 @@ const DeleteModal = memo(
 
     const handleModalOpenClose = useCallback(() => {
       setIsOpen((open) => !open);
-    }, [setIsOpen]);
+    }, []);
 
     const handleDelete = useCallback(() => {
       contactId && messageId && onDelete(contactId, messageId);
       setIsOpen((open) => !open);
-    }, [onDelete, setIsOpen]);
+    }, [onDelete]);
 
     return (
       <>

@@ -5,8 +5,7 @@ import CreateEditModal from '../Modals/CreateEditModal';
 import DeleteModal from '../Modals/DeleteModal';
 import { MdDelete, MdEdit } from 'react-icons/md';
 
-import { Mode } from '../constants';
-import { format } from 'date-fns';
+import { Mode, timeFormatter } from '../utils';
 
 interface UserMessageProps {
   contactId: string;
@@ -27,8 +26,6 @@ const UserMessage = memo(
     onMessageEdit,
   }: UserMessageProps) => {
     const { mode } = useMode();
-
-    const formattedTime = format(new Date(timestamp), 'HH:mm');
 
     console.log('New Message found: ', text);
 
@@ -64,7 +61,9 @@ const UserMessage = memo(
             </div>
 
             {mode === Mode.Spacious && (
-              <span className='text-[10px] font-poppins'>{formattedTime}</span>
+              <span className='text-[10px] font-poppins'>
+                {timeFormatter(timestamp)}
+              </span>
             )}
           </div>
         </div>

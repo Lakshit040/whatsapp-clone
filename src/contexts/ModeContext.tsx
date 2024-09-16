@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Mode } from '../constants';
+import { Mode } from '../utils';
 
 interface ModeContextType {
   mode: Mode;
@@ -24,7 +24,7 @@ export const ModeProvider: React.FC<{ children: ReactNode }> = ({
     setMode((prevMode) =>
       prevMode === Mode.Compact ? Mode.Spacious : Mode.Compact
     );
-  }, [setMode]);
+  }, []);
 
   const contextValue = useMemo(
     () => ({

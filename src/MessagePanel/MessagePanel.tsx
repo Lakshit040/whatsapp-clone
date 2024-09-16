@@ -14,7 +14,7 @@ const MessagePanel = memo(() => {
 
   const handleChatClose = useCallback(() => {
     setSelectedContact(null);
-  }, [setSelectedContact]);
+  }, []);
 
   if (selectedContact === null) {
     return (

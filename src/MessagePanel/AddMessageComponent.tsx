@@ -18,12 +18,11 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
   const handleAddMessage = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      if (message.trim() === '') return;
+      if (message.trim().length === 0) return;
       addMessage(contactId, message.trim());
-
       setMessage('');
     },
-    [message, setMessage, contactId, addMessage]
+    [message, contactId, addMessage]
   );
 
   const handleKeyDown = useCallback(
@@ -40,7 +39,7 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       setMessage(event.target.value);
     },
-    [setMessage]
+    []
   );
 
   return (

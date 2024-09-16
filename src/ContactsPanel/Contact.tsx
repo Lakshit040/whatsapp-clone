@@ -1,18 +1,19 @@
 import { memo, useCallback, useEffect } from 'react';
-
 import { useMode } from '../contexts/ModeContext';
 import { useSelectedContact } from '../contexts/SelectedContactContext';
-import { type ContactProps } from '../contexts/ContactsContext';
 
 import { MdDelete } from 'react-icons/md';
 
-import _ from 'lodash';
-import { format } from 'date-fns';
-import { Mode } from '../constants';
-import { type Message } from '../contexts/MessagesContext';
+import {
+  Mode,
+  timeFormatter,
+  truncateMessage,
+  type Contact,
+  type Message,
+} from '../utils';
 
 interface ContactComponentProps {
-  contact: ContactProps;
+  contact: Contact;
   lastMessage?: Message;
   onDelete: (contactId: string) => void;
 }
@@ -25,12 +26,11 @@ const Contact = memo(
     const handleContactDelete = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
-        onDelete(contact.id)
-
+        onDelete(contact.id);
         if (selectedContact && selectedContact.id === contact.id)
           setSelectedContact(null);
       },
-      [onDelete, setSelectedContact, contact.id, selectedContact]
+      [onDelete, contact.id, selectedContact]
     );
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const Contact = memo(
     const handleContactClick = useCallback(() => {
       if (selectedContact && selectedContact.id === contact.id) return;
       setSelectedContact(contact);
-    }, [setSelectedContact, selectedContact, contact.id]);
+    }, [selectedContact, contact.id]);
 
     return (
       <div
@@ -64,14 +64,10 @@ const Contact = memo(
           {mode === Mode.Spacious && lastMessage && (
             <div className='flex justify-between items-center w-full'>
               <span className='text-xs text-gray-300 '>
-                {_.truncate(lastMessage.message, {
-                  length: 50,
-                  separator: /,?\s+/,
-                  omission: '...',
-                })}
+                {truncateMessage(lastMessage.message)}
               </span>
               <span className='text-xs text-gray-400'>
-                {format(new Date(lastMessage.timestamp), 'HH:mm')}
+                {timeFormatter(lastMessage.timestamp)}
               </span>
             </div>
           )}

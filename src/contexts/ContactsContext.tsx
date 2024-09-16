@@ -7,17 +7,16 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import { v4 as getId } from 'uuid';
-
-export interface ContactProps {
-  id: string;
-  name: string;
-  profileImg: string;
-}
+import {
+  loadContactsFromStorage,
+  saveContactsToStorage,
+  generateUniqueId,
+  type Contact,
+} from '../utils';
 
 interface ContactContextProps {
-  contacts: ContactProps[];
-  addNewContact: (name: string, profileImg: string) => void;
+  contacts: Contact[];
+  addContact: (name: string, profileImg: string) => void;
   deleteContact: (contactId: string) => void;
 }
 
@@ -25,21 +24,10 @@ const ContactContext = createContext<ContactContextProps | undefined>(
   undefined
 );
 
-const LOCAL_STORAGE_CONTACT_KEY = 'contacts';
-
-const saveContactsToStorage = (contacts: ContactProps[]) => {
-  localStorage.setItem(LOCAL_STORAGE_CONTACT_KEY, JSON.stringify(contacts));
-};
-
-const loadContactsFromStorage = (): ContactProps[] => {
-  const contacts = localStorage.getItem(LOCAL_STORAGE_CONTACT_KEY);
-  return contacts ? JSON.parse(contacts) : [];
-};
-
 export const ContactsProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [contacts, setContacts] = useState<ContactProps[]>(
+  const [contacts, setContacts] = useState<Contact[]>(
     loadContactsFromStorage()
   );
 
@@ -47,9 +35,9 @@ export const ContactsProvider: React.FC<{ children: ReactNode }> = ({
     saveContactsToStorage(contacts);
   }, [contacts]);
 
-  const addNewContact = useCallback((name: string, profileImg: string) => {
-    const newContact: ContactProps = {
-      id: getId(),
+  const addContact = useCallback((name: string, profileImg: string) => {
+    const newContact: Contact = {
+      id: generateUniqueId(),
       name,
       profileImg,
     };
@@ -65,10 +53,10 @@ export const ContactsProvider: React.FC<{ children: ReactNode }> = ({
   const contextValue = useMemo(
     () => ({
       contacts,
-      addNewContact,
+      addContact,
       deleteContact,
     }),
-    [contacts, addNewContact, deleteContact]
+    [contacts, addContact, deleteContact]
   );
 
   return (

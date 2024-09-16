@@ -1,15 +1,16 @@
 import { useCallback, useState, memo, useEffect } from 'react';
-import { useContacts, type ContactProps } from '../contexts/ContactsContext';
+import { useContacts } from '../contexts/ContactsContext';
+import type { Contact } from '../utils';
 
 import { IoSearch } from 'react-icons/io5';
 
 interface SearchBarProps {
-  onContactSelect: (contact: ContactProps) => void;
+  onContactSelect: (contact: Contact) => void;
 }
 
 const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
   const [query, setQuery] = useState('');
-  const [filteredOptions, setFilteredOptions] = useState<ContactProps[]>([]);
+  const [filteredOptions, setFilteredOptions] = useState<Contact[]>([]);
   const { contacts } = useContacts();
 
   useEffect(() => {
@@ -30,16 +31,16 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
         setFilteredOptions([]);
       }
     },
-    [contacts, setFilteredOptions, setQuery]
+    [contacts]
   );
 
   const handleOptionClick = useCallback(
-    (contact: ContactProps) => {
+    (contact: Contact) => {
       setQuery('');
       setFilteredOptions([]);
       onContactSelect(contact);
     },
-    [onContactSelect, setQuery, setFilteredOptions]
+    [onContactSelect]
   );
 
   return (

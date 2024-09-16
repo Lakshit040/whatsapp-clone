@@ -5,16 +5,11 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-
-interface ContactProps {
-  id: string;
-  name: string;
-  profileImg: string;
-}
+import type { Contact } from '../utils';
 
 interface SelectedContactContextProps {
-  selectedContact: ContactProps | null;
-  setSelectedContact: (contact: ContactProps | null) => void;
+  selectedContact: Contact | null;
+  setSelectedContact: (contact: Contact | null) => void;
 }
 
 const SelectedContactContext = createContext<
@@ -24,9 +19,7 @@ const SelectedContactContext = createContext<
 export const SelectedContactProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [selectedContact, setSelectedContact] = useState<ContactProps | null>(
-    null
-  );
+  const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
 
   const contextValue = useMemo(
     () => ({

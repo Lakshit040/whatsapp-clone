@@ -1,4 +1,3 @@
-import { format } from 'date-fns';
 import {
   useState,
   useEffect,
@@ -9,14 +8,13 @@ import {
   ReactNode,
 } from 'react';
 
-import { v4 as getId } from 'uuid';
-
-export interface Message {
-  id: string;
-  contactId: string;
-  message: string;
-  timestamp: string;
-}
+import {
+  loadMessagesFromStorage,
+  saveMessagesIntoStorage,
+  timeFormatter,
+  generateUniqueId,
+  type Message,
+} from '../utils';
 
 interface MessageContextProps {
   messages: Record<string, Message[]>;
@@ -33,16 +31,6 @@ interface MessageContextProps {
 const MessageContext = createContext<MessageContextProps | undefined>(
   undefined
 );
-const DATE_TIME_FORMAT = 'yyyy-MM-dd HH:mm';
-const LOCAL_STORAGE_MESSAGE_KEY = 'messages';
-const loadMessagesFromStorage = (): Record<string, Message[]> => {
-  const storedMessages = localStorage.getItem(LOCAL_STORAGE_MESSAGE_KEY);
-  return storedMessages ? JSON.parse(storedMessages) : {};
-};
-
-const saveMessagesIntoStorage = (messages: Record<string, Message[]>): void => {
-  localStorage.setItem(LOCAL_STORAGE_MESSAGE_KEY, JSON.stringify(messages));
-};
 
 export const MessagesProvider: React.FC<{ children: ReactNode }> = ({
   children,
@@ -57,10 +45,10 @@ export const MessagesProvider: React.FC<{ children: ReactNode }> = ({
 
   const addMessage = useCallback((contactId: string, message: string) => {
     const newMessage: Message = {
-      id: getId(),
+      id: generateUniqueId(),
       contactId,
       message,
-      timestamp: format(new Date(), DATE_TIME_FORMAT),
+      timestamp: timeFormatter(),
     };
     setMessages((prevMessages) => {
       const updatedMessages = { ...prevMessages };
@@ -130,10 +118,4 @@ export const useMessages = () => {
     throw new Error('useMessages must be used within a MessageContextProvider');
   }
   return context;
-};
-
-export const useMesssagesForContact = (contactId: string) => {
-  const { messages } = useMessages();
-
-  return useMemo(() => messages[contactId], [messages, contactId]);
 };

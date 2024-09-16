@@ -6,7 +6,7 @@ import { PiCircleDashed } from 'react-icons/pi';
 import { HiDotsVertical } from 'react-icons/hi';
 import { FiMaximize, FiMinimize } from 'react-icons/fi';
 
-import { Mode } from '../constants';
+import { Mode } from '../utils';
 
 const ProfileArea = memo(() => {
   const { mode, toggleMode } = useMode();
