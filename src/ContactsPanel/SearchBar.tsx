@@ -26,7 +26,7 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
       } else {
         setFilteredOptions([]);
       }
-    }, 300),
+    }, 200),
     [contacts]
   );
 
