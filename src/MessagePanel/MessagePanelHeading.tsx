@@ -1,7 +1,6 @@
 import { memo } from 'react';
 
-import { IoSearch } from 'react-icons/io5';
-import { RxCross2 } from 'react-icons/rx';
+import { SearchButton, CloseButton } from '../icons';
 
 interface MessagePanelHeadingProps {
   name: string;
@@ -30,12 +29,12 @@ const MessagePanelHeading = memo(
           </div>
         </div>
         <div className='flex items-center gap-4'>
-          <IoSearch
+          <SearchButton
             className='w-6 h-6 text-gray-400 hover:text-white cursor-pointer'
             title='Search a message'
           />
 
-          <RxCross2
+          <CloseButton
             className='w-6 h-6 text-gray-400 hover:text-white cursor-pointer'
             title='Close Chat'
             onClick={onChatClose}

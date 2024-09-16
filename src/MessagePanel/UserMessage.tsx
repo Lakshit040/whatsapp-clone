@@ -3,7 +3,7 @@ import { useMode } from '../contexts/ModeContext';
 
 import CreateEditModal from '../Modals/CreateEditModal';
 import DeleteModal from '../Modals/DeleteModal';
-import { MdDelete, MdEdit } from 'react-icons/md';
+import { DeleteButton, EditButton } from '../icons';
 
 import { Mode, timeFormatter } from '../utils';
 
@@ -39,7 +39,7 @@ const UserMessage = memo(
                 onMessageEdit={onMessageEdit}
                 editedMessage={text}
               >
-                <MdEdit
+                <EditButton
                   className='w-4 h-4 text-gray-400 font-semibold hover:scale-110 rounded-full m-1'
                   title='Edit Message'
                 />
@@ -51,7 +51,7 @@ const UserMessage = memo(
                 messageId={messageId}
                 onDelete={onMessageDelete}
               >
-                <MdDelete
+                <DeleteButton
                   className='w-4 h-4 text-gray-400 font-semibold hover:scale-110 rounded-full m-1'
                   title='Delete Message'
                 />

@@ -1,6 +1,6 @@
 import { useCallback, useState, memo } from 'react';
 
-import { IoMdSend } from 'react-icons/io';
+import { SendButton } from '../icons';
 import { useMessages } from '../contexts/MessagesContext';
 
 interface AddMessageComponentProps {
@@ -57,7 +57,7 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
           title='Send message'
         >
           Send
-          <IoMdSend className='w-6 h-6' />
+          <SendButton className='w-6 h-6' />
         </button>
       </form>
     </div>

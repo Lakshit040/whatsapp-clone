@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react';
 import { useMode } from '../contexts/ModeContext';
 import { useSelectedContact } from '../contexts/SelectedContactContext';
 
-import { MdDelete } from 'react-icons/md';
+import { DeleteButton } from '../icons';
 
 import {
   Mode,
@@ -72,7 +72,7 @@ const Contact = memo(
             className='absolute right-4 top-6 hidden group-hover:block'
             onClick={handleContactDelete}
           >
-            <MdDelete
+            <DeleteButton
               className='w-6 h-6 text-gray-400 hover:text-white cursor-pointer hover:scale-110'
               title='Delete contact'
             />

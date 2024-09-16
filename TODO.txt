@@ -1,3 +1,0 @@
-Delete whole conversation
-show last msg preview 
-implement modes

@@ -1,13 +1,12 @@
 import { memo } from 'react';
-import { MdPermScanWifi } from 'react-icons/md';
-import { RxCross2 } from 'react-icons/rx';
+import { WifiButton, CloseButton } from '../icons';
 
 const ImportContacts = memo(() => {
   return (
     <div className='container mx-auto p-5 bg-[#2e23c9] bg-opacity-80 relative'>
       <div className='flex gap-1'>
         <div className='rounded-full bg-white flex justify-center items-center w-[45px] h-[45px]'>
-          <MdPermScanWifi className='text-blue-700 w-6 h-6' />
+          <WifiButton className='text-blue-700 w-6 h-6' />
         </div>
         <div className='pl-2'>
           <span className='text-xl font-poppins'>No Contacts</span>
@@ -18,7 +17,7 @@ const ImportContacts = memo(() => {
         </div>
       </div>
       <div className='absolute top-3 right-3' title='Close'>
-        <RxCross2 className='w-5 h-5 cursor-pointer' />
+        <CloseButton className='w-5 h-5 cursor-pointer' />
       </div>
     </div>
   );

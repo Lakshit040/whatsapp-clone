@@ -4,7 +4,7 @@ import { useMessages } from '../contexts/MessagesContext';
 
 import Contact from './Contact';
 import CreateEditModal from '../Modals/CreateEditModal';
-import { FaPlus } from 'react-icons/fa';
+import { FaPlus } from '../icons';
 
 const ContactList = memo(() => {
   const { contacts, addContact, deleteContact } = useContacts();
