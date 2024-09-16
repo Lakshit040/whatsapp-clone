@@ -3,8 +3,15 @@ import { useContacts } from '../contexts/ContactsContext';
 import { useMessages } from '../contexts/MessagesContext';
 
 import Contact from './Contact';
-import CreateEditModal from '../Modals/CreateEditModal';
+
 import { FaPlus } from '../icons';
+import Modal from '../Modals/Modal';
+import {
+  ModalActionType,
+  OnConfirm,
+  onModalConfirm,
+  PROFILE_IMG,
+} from '../utils';
 
 const ContactList = memo(() => {
   const { contacts, addContact, deleteContact } = useContacts();
@@ -19,11 +26,17 @@ const ContactList = memo(() => {
     );
   }, [messages]);
 
-  const handleAddNewContact = useCallback(
-    (name: string, profileImg: string) => {
-      addContact(name, profileImg);
+  const handleAddNewContact: OnConfirm = useCallback(
+    (event: onModalConfirm) => {
+      const {
+        type,
+        state: { entry },
+      } = event;
+      if (type === ModalActionType.AddContact && entry) {
+        addContact(entry, PROFILE_IMG);
+      }
     },
-    [addContact]
+    []
   );
 
   const handleContactDelete = useCallback(
@@ -31,7 +44,7 @@ const ContactList = memo(() => {
       deleteContact(contactId);
       if (lastMessages[contactId]) clearMessagesForContact(contactId);
     },
-    [lastMessages, deleteContact, clearMessagesForContact]
+    [lastMessages]
   );
 
   return (
@@ -44,13 +57,16 @@ const ContactList = memo(() => {
           lastMessage={lastMessages[contact.id]}
         />
       ))}
-      <div className='absolute bottom-8 left-4'>
-        <CreateEditModal onContactSave={handleAddNewContact}>
+      <div className='fixed bottom-4 left-4 z-10'>
+        <Modal
+          actionType={ModalActionType.AddContact}
+          onConfirm={handleAddNewContact}
+        >
           <FaPlus
             className='w-6 h-6 text-white m-4'
             title='Create New Contact'
           />
-        </CreateEditModal>
+        </Modal>
       </div>
     </div>
   );

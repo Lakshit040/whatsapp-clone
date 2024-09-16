@@ -15,6 +15,25 @@ export const enum Mode {
   Spacious,
 }
 
+export const enum ModalActionType {
+  AddContact,
+  DeleteContact,
+  EditMessage,
+  DeleteMessage,
+}
+
+export interface ModalActionProps {
+  contactId?: string;
+  messageId?: string;
+  entry?: string;
+}
+export type onModalConfirm = {
+  type: ModalActionType;
+  state: ModalActionProps;
+};
+
+export type OnConfirm = (event: onModalConfirm ) => void;
+
 export type Message = {
   id: string;
   contactId: string;
@@ -72,4 +91,30 @@ export const debounce = <T extends (...args: any[]) => void>(
   wait: number
 ) => {
   return _.debounce(func, wait);
+};
+
+export const headingGenerator = (action: ModalActionType) => {
+  switch (action) {
+    case ModalActionType.AddContact:
+      return 'Add New Contact?';
+    case ModalActionType.DeleteContact:
+      return 'Are you sure?';
+    case ModalActionType.DeleteMessage:
+      return 'Are you sure?';
+    case ModalActionType.EditMessage:
+      return 'Edit Your Message?';
+    default:
+      return '';
+  }
+};
+
+export const labelGenerator = (action: ModalActionType) => {
+  switch (action) {
+    case ModalActionType.AddContact:
+      return 'Name';
+    case ModalActionType.EditMessage:
+      return 'Message';
+    default:
+      return undefined;
+  }
 };

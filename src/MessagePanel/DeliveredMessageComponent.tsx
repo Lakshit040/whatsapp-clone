@@ -1,7 +1,8 @@
-import { memo, useEffect, useMemo, useRef } from 'react';
+import { memo, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useMessages } from '../contexts/MessagesContext';
 
 import UserMessage from './UserMessage';
+import { ModalActionType, OnConfirm, onModalConfirm } from '../utils';
 
 interface DeliveredMessageComponentProps {
   contactId: string;
@@ -15,6 +16,36 @@ const DeliveredMessageComponent = memo(
     const contactMessages = useMemo(
       () => messages[contactId] ?? [],
       [messages, contactId]
+    );
+
+    const handleMessageDelete: OnConfirm = useCallback(
+      (event: onModalConfirm) => {
+        const {
+          type,
+          state: { contactId, messageId },
+        } = event;
+        if (type === ModalActionType.DeleteMessage && contactId && messageId)
+          deleteMessage(contactId, messageId);
+      },
+      [deleteMessage]
+    );
+
+    const handleMessageEdit: OnConfirm = useCallback(
+      (event: onModalConfirm) => {
+        const {
+          type,
+          state: { contactId, messageId, entry },
+        } = event;
+        if (
+          type === ModalActionType.EditMessage &&
+          contactId &&
+          messageId &&
+          entry
+        ) {
+          editMessage(contactId, messageId, entry);
+        }
+      },
+      [editMessage]
     );
 
     useEffect(() => {
@@ -39,8 +70,8 @@ const DeliveredMessageComponent = memo(
               messageId={message.id}
               text={message.message}
               timestamp={message.timestamp}
-              onMessageDelete={deleteMessage}
-              onMessageEdit={editMessage}
+              onMessageDelete={handleMessageDelete}
+              onMessageEdit={handleMessageEdit}
             />
           ))}
         </div>

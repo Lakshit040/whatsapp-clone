@@ -5,12 +5,16 @@ import { useSelectedContact } from '../contexts/SelectedContactContext';
 import { DeleteButton } from '../icons';
 
 import {
+  ModalActionType,
   Mode,
+  OnConfirm,
+  onModalConfirm,
   timeFormatter,
   truncateMessage,
   type Contact,
   type Message,
 } from '../utils';
+import Modal from '../Modals/Modal';
 
 interface ContactComponentProps {
   contact: Contact;
@@ -23,12 +27,14 @@ const Contact = memo(
     const { mode } = useMode();
     const { selectedContact, setSelectedContact } = useSelectedContact();
 
-    const handleContactDelete = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.stopPropagation();
-        onDelete(contact.id);
-        if (selectedContact && selectedContact.id === contact.id)
-          setSelectedContact(null);
+    const handleContactDelete: OnConfirm = useCallback(
+      (event: onModalConfirm) => {
+        const { type } = event;
+        if (type === ModalActionType.DeleteContact) {
+          onDelete(contact.id);
+          if (selectedContact && selectedContact.id === contact.id)
+            setSelectedContact(null);
+        }
       },
       [onDelete, contact.id, selectedContact]
     );
@@ -68,15 +74,17 @@ const Contact = memo(
             </div>
           )}
 
-          <button
-            className='absolute right-4 top-6 hidden group-hover:block'
-            onClick={handleContactDelete}
-          >
-            <DeleteButton
-              className='w-6 h-6 text-gray-400 hover:text-white cursor-pointer hover:scale-110'
-              title='Delete contact'
-            />
-          </button>
+          <div className='absolute right-4 top-6 hidden group-hover:block'>
+            <Modal
+              actionType={ModalActionType.DeleteContact}
+              onConfirm={handleContactDelete}
+            >
+              <DeleteButton
+                className='w-5 h-5 text-gray-400 hover:text-white cursor-pointer hover:scale-110'
+                title='Delete contact'
+              />
+            </Modal>
+          </div>
         </div>
       </div>
     );
