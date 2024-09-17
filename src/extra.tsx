@@ -32,10 +32,13 @@ const deepCompare = (obj1: any, obj2: any): boolean => {
 // to mimic constructor in class component
 export const useConstructor = (callback: Callback) => {
   const hasRun = useRef(false);
-  if (!hasRun.current) {
-    callback();
-    hasRun.current = true;
-  }
+
+  useEffect(() => {
+    if (!hasRun.current) {
+      callback();
+      hasRun.current = true;
+    }
+  }, []);
 };
 
 // to mimic componentDidUpdate
@@ -45,6 +48,8 @@ export const useUpdate = (callback: Callback, dependencies: DependencyList) => {
 
   useEffect(() => {
     if (hasMounted.current) {
+      if (dependencies.length === 0) return;
+
       const isChanged = dependencies.some(
         (dependency, index) =>
           !deepCompare(dependency, prevDependencies.current[index])
@@ -87,4 +92,36 @@ export const usePrevious = <T,>(value: T): T | undefined => {
   }, [value]);
 
   return ref.current;
+};
+
+export const debounce = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+): ((...args: Parameters<T>) => void) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  return (...args: Parameters<T>): void => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
+
+export const throttle = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+): ((...args: Parameters<T>) => void) => {
+  let lastCall = 0;
+
+  return (...args: Parameters<T>): void => {
+    const now = new Date().getTime();
+
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      func(...args);
+    }
+  };
 };
