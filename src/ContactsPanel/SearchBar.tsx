@@ -1,19 +1,18 @@
 import { useCallback, useState, memo, FormEvent } from 'react';
-import { useContacts } from '../contexts/ContactsContext';
 import { debounce, type Contact } from '../utils';
 
 import { SearchButton } from '../icons';
 import FilteredOption from './FilteredOption';
 
 interface SearchBarProps {
+  contacts: Contact[];
   onContactSelect: (contact: Contact) => void;
 }
 
-const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
+const SearchBar = memo(({ onContactSelect, contacts }: SearchBarProps) => {
   const [query, setQuery] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<Contact[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
-  const { contacts } = useContacts();
 
   const debouncedFilter = useCallback(
     debounce((value: string) => {

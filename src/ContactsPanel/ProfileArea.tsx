@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { useMode } from '../contexts/ModeContext';
+import useMode from '../customHooks/useMode';
 
 import {
   UserButton,

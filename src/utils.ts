@@ -32,7 +32,7 @@ export type onModalConfirm = {
   state: ModalActionProps;
 };
 
-export type OnConfirm = (event: onModalConfirm ) => void;
+export type OnConfirm = (event: onModalConfirm) => void;
 
 export type Message = {
   id: string;
@@ -44,12 +44,16 @@ export type Message = {
 export type Contact = {
   id: string;
   name: string;
-  profileImg: string;
+  lastMessage?: Message;
 };
 
 export const LOCAL_STORAGE_CONTACT_KEY = 'contacts';
 
 export const LOCAL_STORAGE_MESSAGE_KEY = 'messages';
+
+const getMessageKey = (id: string) => {
+  return `messages_${id}`;
+};
 
 export const saveContactsToStorage = (contacts: Contact[]) => {
   localStorage.setItem(LOCAL_STORAGE_CONTACT_KEY, JSON.stringify(contacts));
@@ -59,14 +63,15 @@ export const loadContactsFromStorage = (): Contact[] => {
   return JSON.parse(localStorage.getItem(LOCAL_STORAGE_CONTACT_KEY) ?? '[]');
 };
 
-export const loadMessagesFromStorage = (): Record<string, Message[]> => {
-  return JSON.parse(localStorage.getItem(LOCAL_STORAGE_MESSAGE_KEY) ?? '[]');
+export const loadMessagesFromStorage = (contactId: string): Message[] => {
+  return JSON.parse(localStorage.getItem(getMessageKey(contactId)) ?? '[]');
 };
 
 export const saveMessagesIntoStorage = (
-  messages: Record<string, Message[]>
+  contactId: string,
+  messages: Message[]
 ): void => {
-  localStorage.setItem(LOCAL_STORAGE_MESSAGE_KEY, JSON.stringify(messages));
+  localStorage.setItem(getMessageKey(contactId), JSON.stringify(messages));
 };
 
 export const timeFormatter = (timeStr?: string) => {
@@ -118,3 +123,11 @@ export const labelGenerator = (action: ModalActionType) => {
       return undefined;
   }
 };
+
+export interface MessageDetail {
+  contactId: string;
+  lastMessage?: Message;
+}
+
+export type LastMessageUpdateEvent = CustomEvent<MessageDetail>;
+

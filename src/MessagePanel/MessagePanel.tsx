@@ -1,16 +1,9 @@
-import { memo, useCallback } from 'react';
-import { useSelectedContact } from '../contexts/SelectedContactContext';
-
-import MessagePanelHeading from './MessagePanelHeading';
-import DeliveredMessageComponent from './DeliveredMessageComponent';
-import AddMessageComponent from './AddMessageComponent';
+import { memo } from 'react';
+import useSelectedContact from '../customHooks/useSelectedContact';
+import MessageAreaComponent from './MessageAreaComponent';
 
 const MessagePanel = memo(() => {
-  const { selectedContact, setSelectedContact } = useSelectedContact();
-
-  const handleChatClose = useCallback(() => {
-    setSelectedContact(null);
-  }, []);
+  const { selectedContact, selectContact } = useSelectedContact();
 
   if (selectedContact === null) {
     return (
@@ -21,20 +14,11 @@ const MessagePanel = memo(() => {
   }
 
   return (
-    <div className='container mx-auto relative h-screen bg-custom-bg bg-center bg-repeat flex flex-col'>
-      <MessagePanelHeading
-        name={selectedContact.name}
-        profileImg={selectedContact.profileImg}
-        onChatClose={handleChatClose}
-        className='sticky'
-      />
-      <div className='flex-1 overflow-y-auto'>
-        <DeliveredMessageComponent contactId={selectedContact.id} />
-      </div>
-      <div className='w-full sticky bottom-0'>
-        <AddMessageComponent contactId={selectedContact.id} />
-      </div>
-    </div>
+    <MessageAreaComponent
+      contactId={selectedContact.id}
+      selectContact={selectContact}
+      name={selectedContact.name}
+    />
   );
 });
 

@@ -1,75 +1,68 @@
-import { useCallback, memo, useMemo } from 'react';
-import { useContacts } from '../contexts/ContactsContext';
-import { useMessages } from '../contexts/MessagesContext';
-
-import Contact from './Contact';
+import { useCallback, memo } from 'react';
 
 import { FaPlus } from '../icons';
 import Modal from '../Modals/Modal';
 import {
+  type Contact as ContactType,
   ModalActionType,
   OnConfirm,
   onModalConfirm,
-  PROFILE_IMG,
 } from '../utils';
 
-const ContactList = memo(() => {
-  const { contacts, addContact, deleteContact } = useContacts();
-  const { messages, clearMessagesForContact } = useMessages();
+import Contact from './Contact';
 
-  const lastMessages = useMemo(() => {
-    return Object.fromEntries(
-      Object.entries(messages).map(([contactId, messageArray]) => {
-        const lastMessage = messageArray?.at(-1);
-        return [contactId, lastMessage];
-      })
+interface ContactListProps {
+  contacts: ContactType[];
+  addContact: (name: string) => void;
+  deleteContact: (contactId: string) => void;
+}
+
+const ContactList = memo(
+  ({ contacts, addContact, deleteContact }: ContactListProps) => {
+    const handleAddNewContact: OnConfirm = useCallback(
+      (event: onModalConfirm) => {
+        const {
+          type,
+          state: { entry },
+        } = event;
+        if (type === ModalActionType.AddContact && entry) {
+          addContact(entry);
+        }
+      },
+      [addContact]
     );
-  }, [messages]);
 
-  const handleAddNewContact: OnConfirm = useCallback(
-    (event: onModalConfirm) => {
-      const {
-        type,
-        state: { entry },
-      } = event;
-      if (type === ModalActionType.AddContact && entry) {
-        addContact(entry, PROFILE_IMG);
-      }
-    },
-    []
-  );
+    const handleContactDelete = useCallback(
+      (contactId: string) => {
+        deleteContact(contactId);
+      },
+      [deleteContact]
+    );
 
-  const handleContactDelete = useCallback(
-    (contactId: string) => {
-      deleteContact(contactId);
-      if (lastMessages[contactId]) clearMessagesForContact(contactId);
-    },
-    [lastMessages]
-  );
-
-  return (
-    <div className='container mx-auto h-[calc(100vh-200px)] overflow-y-scroll relative'>
-      {contacts.map((contact) => (
-        <Contact
-          key={contact.id}
-          contact={contact}
-          onDelete={handleContactDelete}
-          lastMessage={lastMessages[contact.id]}
-        />
-      ))}
-      <div className='fixed bottom-4 left-4 z-10'>
-        <Modal
-          actionType={ModalActionType.AddContact}
-          onConfirm={handleAddNewContact}
-        >
-          <FaPlus
-            className='w-6 h-6 text-white m-4'
-            title='Create New Contact'
+    return (
+      <div className='container mx-auto h-[calc(100vh-200px)] overflow-y-scroll relative'>
+        {contacts.map((contact) => (
+          <Contact
+            key={contact.id}
+            contact={contact}
+            onDelete={handleContactDelete}
+            lastMessage={contact.lastMessage}
           />
-        </Modal>
+        ))}
+        <div className='fixed bottom-4 left-4 z-10'>
+          <Modal
+            actionType={ModalActionType.AddContact}
+            onConfirm={handleAddNewContact}
+          >
+            <FaPlus
+              className='w-6 h-6 text-white m-4'
+              title='Create New Contact'
+            />
+          </Modal>
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 export default ContactList;

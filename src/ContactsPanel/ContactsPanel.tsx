@@ -1,25 +1,31 @@
 import { memo, useCallback } from 'react';
-import { useSelectedContact } from '../contexts/SelectedContactContext';
+import useSelectedContact from '../customHooks/useSelectedContact';
 import type { Contact } from '../utils';
 
 import ContactList from './ContactList';
 import ImportContacts from './ImportContacts';
 import ProfileArea from './ProfileArea';
 import SearchBar from './SearchBar';
+import useContacts from '../customHooks/useContacts';
 
 const ContactsPanel = memo(() => {
-  const { setSelectedContact } = useSelectedContact();
+  const { selectContact } = useSelectedContact();
+  const { contacts, addContact, deleteContact } = useContacts();
 
   const onContactSelect = useCallback((contact: Contact) => {
-    setSelectedContact(contact);
+    selectContact(contact);
   }, []);
 
   return (
     <>
       <ProfileArea />
       <ImportContacts />
-      <SearchBar onContactSelect={onContactSelect} />
-      <ContactList />
+      <SearchBar contacts={contacts} onContactSelect={onContactSelect} />
+      <ContactList
+        contacts={contacts}
+        addContact={addContact}
+        deleteContact={deleteContact}
+      />
     </>
   );
 });

@@ -1,24 +1,22 @@
-import { useCallback, useState, memo } from 'react';
+import { useCallback, useState } from 'react';
 
 import { SendButton } from '../icons';
-import { useMessages } from '../contexts/MessagesContext';
 
 interface AddMessageComponentProps {
-  contactId: string;
+  addMessage: (message: string) => void;
 }
 
-const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
-  const { addMessage } = useMessages();
+const AddMessageComponent = ({ addMessage }: AddMessageComponentProps) => {
   const [message, setMessage] = useState('');
 
   const handleAddMessage = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       if (message.trim().length === 0) return;
-      addMessage(contactId, message.trim());
+      addMessage(message.trim());
       setMessage('');
     },
-    [message, contactId, addMessage]
+    [message]
   );
 
   const handleKeyDown = useCallback(
@@ -62,6 +60,6 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
       </form>
     </div>
   );
-});
+};
 
 export default AddMessageComponent;

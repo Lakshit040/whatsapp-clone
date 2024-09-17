@@ -1,6 +1,7 @@
 import React, {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useMemo,
   useState,
@@ -9,7 +10,7 @@ import type { Contact } from '../utils';
 
 interface SelectedContactContextProps {
   selectedContact: Contact | null;
-  setSelectedContact: (contact: Contact | null) => void;
+  selectContact: (contact: Contact | null) => void;
 }
 
 const SelectedContactContext = createContext<
@@ -21,12 +22,16 @@ export const SelectedContactProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
 
+  const selectContact = useCallback((contact: Contact | null) => {
+    setSelectedContact(contact);
+  }, []);
+
   const contextValue = useMemo(
     () => ({
       selectedContact,
-      setSelectedContact,
+      selectContact,
     }),
-    [selectedContact, setSelectedContact]
+    [selectedContact]
   );
 
   return (
@@ -36,7 +41,7 @@ export const SelectedContactProvider: React.FC<{ children: ReactNode }> = ({
   );
 };
 
-export const useSelectedContact = () => {
+const useSelectedContact = () => {
   const context = useContext(SelectedContactContext);
   if (!context) {
     throw new Error(
@@ -45,3 +50,5 @@ export const useSelectedContact = () => {
   }
   return context;
 };
+
+export default useSelectedContact;

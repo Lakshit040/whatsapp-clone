@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react';
-import { useMode } from '../contexts/ModeContext';
-import { useSelectedContact } from '../contexts/SelectedContactContext';
+import useMode from '../customHooks/useMode';
+import useSelectedContact from '../customHooks/useSelectedContact';
 
 import { DeleteButton } from '../icons';
 
@@ -9,6 +9,7 @@ import {
   Mode,
   OnConfirm,
   onModalConfirm,
+  PROFILE_IMG,
   timeFormatter,
   truncateMessage,
   type Contact,
@@ -25,7 +26,7 @@ interface ContactComponentProps {
 const Contact = memo(
   ({ contact, lastMessage, onDelete }: ContactComponentProps) => {
     const { mode } = useMode();
-    const { selectedContact, setSelectedContact } = useSelectedContact();
+    const { selectedContact, selectContact } = useSelectedContact();
 
     const handleContactDelete: OnConfirm = useCallback(
       (event: onModalConfirm) => {
@@ -33,7 +34,7 @@ const Contact = memo(
         if (type === ModalActionType.DeleteContact) {
           onDelete(contact.id);
           if (selectedContact && selectedContact.id === contact.id)
-            setSelectedContact(null);
+            selectContact(null);
         }
       },
       [onDelete, contact.id, selectedContact]
@@ -41,8 +42,8 @@ const Contact = memo(
 
     const handleContactClick = useCallback(() => {
       if (selectedContact && selectedContact.id === contact.id) return;
-      setSelectedContact(contact);
-    }, [selectedContact, contact.id]);
+      selectContact(contact);
+    }, [selectedContact, contact.id, selectContact]);
 
     return (
       <div
@@ -56,7 +57,7 @@ const Contact = memo(
       >
         <div className='w-14 h-12 rounded-full overflow-hidden'>
           <img
-            src={contact.profileImg}
+            src={PROFILE_IMG}
             alt={contact.name}
             className='w-full h-full object-cover rounded-full'
           />
