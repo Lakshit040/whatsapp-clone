@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Contact } from '../redux/types';
+import { Contact } from '../types';
 
 interface FilteredOptionProps {
   isHighlighted: boolean;

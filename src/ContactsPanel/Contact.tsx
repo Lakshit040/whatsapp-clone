@@ -4,8 +4,8 @@ import { useSelectedContact } from '../contexts/SelectedContactContext';
 
 import { DeleteButton } from '../icons';
 
-import { Mode, PROFILE_IMG, timeFormatter, truncateMessage } from '../utils';
-import { Contact as ContactType, Message } from '../redux/types';
+import { PROFILE_IMG, timeFormatter, truncateMessage } from '../utils';
+import { Contact as ContactType, Message, Mode } from '../types';
 
 interface ContactComponentProps {
   contact: ContactType;

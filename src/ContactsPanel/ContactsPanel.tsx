@@ -5,7 +5,7 @@ import ContactList from './ContactList';
 import ImportContacts from './ImportContacts';
 import ProfileArea from './ProfileArea';
 import SearchBar from './SearchBar';
-import { Contact } from '../redux/types';
+import { Contact } from '../types';
 
 const ContactsPanel = memo(() => {
   const { setSelectedContact } = useSelectedContact();

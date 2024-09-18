@@ -10,7 +10,7 @@ import {
   StatusButton,
 } from '../icons';
 
-import { Mode } from '../utils';
+import { Mode } from '../types';
 
 const ProfileArea = memo(() => {
   const { mode, toggleMode } = useMode();

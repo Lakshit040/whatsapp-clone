@@ -6,7 +6,7 @@ import { FaPlus } from '../icons';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact, addContact } from '../redux/reducer';
-import { RootState } from './../redux/types';
+import { RootState } from './../types';
 import { generateUniqueId } from '../utils';
 import selectContacts from '../redux/selector';
 
