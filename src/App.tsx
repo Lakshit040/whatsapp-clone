@@ -1,5 +1,5 @@
-import ContactsPanel from './ContactsPanel/ContactsPanel';
-import MessagePanel from './MessagePanel/MessagePanel';
+import ContactsPanel from './ContactsPanel';
+import MessagePanel from './MessagePanel';
 
 import { SelectedContactProvider } from './contexts/SelectedContactContext';
 import { ModeProvider } from './contexts/ModeContext';
