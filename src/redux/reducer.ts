@@ -1,6 +1,6 @@
 // reducers.ts
 import { combineReducers, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Contact, Message, ContactsState, MessagesState } from './types';
+import { Contact, Message, ContactsState, MessagesState } from '../types';
 
 // Contacts Slice
 const contactsSlice = createSlice({

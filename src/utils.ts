@@ -1,20 +1,10 @@
 import { format } from 'date-fns';
-import _ from 'lodash';
+import truncate from 'lodash.truncate';
 import { v4 } from 'uuid';
-import { Contact, Message } from './redux/types';
-
-const enum Format {
-  DateTime = 'yyyy-MM-dd HH:mm',
-  Time = 'HH:mm',
-}
+import { type Contact, type Message, Format } from './types';
 
 export const PROFILE_IMG =
   'https://fastly.picsum.photos/id/297/200/300.jpg?hmac=SF0Y51mRP7i6CoLBIuliqQwDIUJNyf63_r3xhamVSLE';
-
-export const enum Mode {
-  Compact,
-  Spacious,
-}
 
 export const LOCAL_STORAGE_CONTACT_KEY = 'contacts';
 
@@ -48,25 +38,18 @@ export const generateUniqueId = () => {
 };
 
 export const truncateMessage = (message: string) => {
-  return _.truncate(message, {
+  return truncate(message, {
     length: 50,
     separator: /,?\s+/,
     omission: '...',
   });
 };
 
-export const debounce = <T extends (...args: any[]) => void>(
-  func: T,
-  wait: number
-) => {
-  return _.debounce(func, wait);
-};
-
 export const loadState = () => {
   try {
     const serializedState = localStorage.getItem('appState');
     if (serializedState === null) {
-      return undefined; // Let Redux initialize with the default state
+      return undefined;
     }
     return JSON.parse(serializedState);
   } catch (err) {

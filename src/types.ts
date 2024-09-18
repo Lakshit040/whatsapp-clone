@@ -1,4 +1,11 @@
-// types.ts
+export const enum Format {
+  DateTime = 'yyyy-MM-dd HH:mm',
+  Time = 'HH:mm',
+}
+export const enum Mode {
+  Compact,
+  Spacious,
+}
 
 export interface Contact {
   id: string;

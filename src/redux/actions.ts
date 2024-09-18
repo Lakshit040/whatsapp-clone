@@ -4,7 +4,7 @@ import {
   MessageActionType,
   Contact,
   Message,
-} from './types';
+} from '../types';
 
 // Contact Actions
 export const addContact = (contact: Contact) => ({
