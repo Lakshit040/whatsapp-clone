@@ -1,9 +1,10 @@
 import { useCallback, useState, memo, FormEvent } from 'react';
-import { useContacts } from '../contexts/ContactsContext';
-import { debounce, type Contact } from '../utils';
 
 import { SearchButton } from '../icons';
 import FilteredOption from './FilteredOption';
+import { Contact } from '../redux/types';
+import selectContacts from '../redux/selector';
+import { useSelector } from 'react-redux';
 
 interface SearchBarProps {
   onContactSelect: (contact: Contact) => void;
@@ -12,11 +13,13 @@ interface SearchBarProps {
 const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
   const [query, setQuery] = useState('');
   const [filteredOptions, setFilteredOptions] = useState<Contact[]>([]);
-  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1);
-  const { contacts } = useContacts();
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const contacts = useSelector(selectContacts);
 
-  const debouncedFilter = useCallback(
-    debounce((value: string) => {
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target;
+      setQuery(value);
       if (value) {
         const filtered = contacts.filter((option) =>
           option.name.toLowerCase().includes(value.toLowerCase())
@@ -26,17 +29,8 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
       } else {
         setFilteredOptions([]);
       }
-    }, 200),
-    [contacts]
-  );
-
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { value } = e.target;
-      setQuery(value);
-      debouncedFilter(value);
     },
-    [debouncedFilter]
+    [contacts]
   );
 
   const handleOptionClick = useCallback(
@@ -63,11 +57,6 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
         e.preventDefault();
         if (highlightedIndex >= 0) {
           handleOptionClick(filteredOptions[highlightedIndex]);
-        } else if (debouncedFilter) {
-          debouncedFilter.flush();
-          if (filteredOptions.length > 0) {
-            handleOptionClick(filteredOptions[0]);
-          }
         }
       }
     },

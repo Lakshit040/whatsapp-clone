@@ -5,7 +5,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import type { Contact } from '../utils';
+import { Contact } from '../redux/types';
 
 interface SelectedContactContextProps {
   selectedContact: Contact | null;

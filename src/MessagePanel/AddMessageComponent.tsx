@@ -1,21 +1,35 @@
 import { useCallback, useState, memo } from 'react';
 
 import { SendButton } from '../icons';
-import { useMessages } from '../contexts/MessagesContext';
+import { useDispatch } from 'react-redux';
+import { addMessage, updateLastMessage } from '../redux/reducer';
+import { generateUniqueId, timeFormatter } from '../utils';
+import { Message } from '../redux/types';
 
 interface AddMessageComponentProps {
   contactId: string;
 }
 
 const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
-  const { addMessage } = useMessages();
+  const dispatch = useDispatch();
   const [message, setMessage] = useState('');
 
   const handleAddMessage = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
       if (message.trim().length === 0) return;
-      addMessage(contactId, message.trim());
+      const newMessage: Message = {
+        id: generateUniqueId(),
+        text: message,
+        createdAt: timeFormatter(),
+      };
+      dispatch(
+        addMessage({
+          contactId,
+          message: newMessage,
+        })
+      );
+      dispatch(updateLastMessage({ contactId, message: newMessage }));
       setMessage('');
     },
     [message, contactId, addMessage]

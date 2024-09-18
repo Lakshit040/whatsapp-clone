@@ -1,6 +1,7 @@
 import { format } from 'date-fns';
 import _ from 'lodash';
 import { v4 } from 'uuid';
+import { Contact, Message } from './redux/types';
 
 const enum Format {
   DateTime = 'yyyy-MM-dd HH:mm',
@@ -14,19 +15,6 @@ export const enum Mode {
   Compact,
   Spacious,
 }
-
-export type Message = {
-  id: string;
-  contactId: string;
-  message: string;
-  timestamp: string;
-};
-
-export type Contact = {
-  id: string;
-  name: string;
-  profileImg: string;
-};
 
 export const LOCAL_STORAGE_CONTACT_KEY = 'contacts';
 
@@ -72,4 +60,26 @@ export const debounce = <T extends (...args: any[]) => void>(
   wait: number
 ) => {
   return _.debounce(func, wait);
+};
+
+export const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem('appState');
+    if (serializedState === null) {
+      return undefined; // Let Redux initialize with the default state
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    console.error('Error loading state from localStorage:', err);
+    return undefined;
+  }
+};
+
+export const saveState = (state: any) => {
+  try {
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('appState', serializedState);
+  } catch (err) {
+    console.error('Error saving state to localStorage:', err);
+  }
 };

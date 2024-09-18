@@ -1,38 +1,34 @@
-import { useCallback, memo, useMemo } from 'react';
-import { useContacts } from '../contexts/ContactsContext';
-import { useMessages } from '../contexts/MessagesContext';
+import { useCallback, memo } from 'react';
 
 import Contact from './Contact';
 import CreateEditModal from '../Modals/CreateEditModal';
 import { FaPlus } from '../icons';
 
-const ContactList = memo(() => {
-  const { contacts, addContact, deleteContact } = useContacts();
-  const { messages, clearMessagesForContact } = useMessages();
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact, addContact } from '../redux/reducer';
+import { RootState } from './../redux/types';
+import { generateUniqueId } from '../utils';
+import selectContacts from '../redux/selector';
 
-  const lastMessages = useMemo(() => {
-    return Object.fromEntries(
-      Object.entries(messages).map(([contactId, messageArray]) => {
-        const lastMessage = messageArray?.at(-1);
-        return [contactId, lastMessage];
+const ContactList = memo(() => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
+  const lastMessages = useSelector(
+    (state: RootState) => state.contacts.lastMessages
+  );
+
+  const handleAddNewContact = useCallback((name: string) => {
+    dispatch(
+      addContact({
+        id: generateUniqueId(),
+        name,
       })
     );
-  }, [messages]);
+  }, []);
 
-  const handleAddNewContact = useCallback(
-    (name: string, profileImg: string) => {
-      addContact(name, profileImg);
-    },
-    [addContact]
-  );
-
-  const handleContactDelete = useCallback(
-    (contactId: string) => {
-      deleteContact(contactId);
-      if (lastMessages[contactId]) clearMessagesForContact(contactId);
-    },
-    [lastMessages, deleteContact, clearMessagesForContact]
-  );
+  const handleContactDelete = useCallback((contactId: string) => {
+    dispatch(deleteContact(contactId));
+  }, []);
 
   return (
     <div className='container mx-auto h-[calc(100vh-200px)] overflow-y-scroll relative'>

@@ -1,11 +1,11 @@
 import { memo, useCallback } from 'react';
 import { useSelectedContact } from '../contexts/SelectedContactContext';
-import type { Contact } from '../utils';
 
 import ContactList from './ContactList';
 import ImportContacts from './ImportContacts';
 import ProfileArea from './ProfileArea';
 import SearchBar from './SearchBar';
+import { Contact } from '../redux/types';
 
 const ContactsPanel = memo(() => {
   const { setSelectedContact } = useSelectedContact();

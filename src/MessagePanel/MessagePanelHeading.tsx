@@ -1,16 +1,16 @@
 import { memo } from 'react';
 
 import { SearchButton, CloseButton } from '../icons';
+import { PROFILE_IMG } from '../utils';
 
 interface MessagePanelHeadingProps {
   name: string;
-  profileImg: string;
   onChatClose: () => void;
   className?: string;
 }
 
 const MessagePanelHeading = memo(
-  ({ name, profileImg, onChatClose, className }: MessagePanelHeadingProps) => {
+  ({ name, onChatClose, className }: MessagePanelHeadingProps) => {
     return (
       <div
         className={`flex items-center justify-between py-3 px-6 border-gray-600 bg-[#32383b] ${className}`}
@@ -19,7 +19,7 @@ const MessagePanelHeading = memo(
         <div className='flex items-center'>
           <div className='w-14 h-14 rounded-full overflow-hidden cursor-pointer'>
             <img
-              src={profileImg}
+              src={PROFILE_IMG}
               alt={name}
               className='w-full h-full object-cover'
             />

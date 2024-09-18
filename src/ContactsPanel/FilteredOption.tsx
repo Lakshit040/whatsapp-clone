@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { Contact } from '../utils';
+import { Contact } from '../redux/types';
 
 interface FilteredOptionProps {
   isHighlighted: boolean;
   option: Contact;
-  onOptionClick: (option: Contact) => void;
+  onOptionClick: (contact: Contact) => void;
 }
 
 const FilteredOption = ({

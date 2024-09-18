@@ -9,21 +9,15 @@ import {
 import { PROFILE_IMG } from '../utils';
 
 interface CreateEditModalProps {
-  contactId?: string;
   messageId?: string;
   editedMessage?: string;
   onContactSave?: (name: string, profileImg: string) => void;
-  onMessageEdit?: (
-    contactId: string,
-    messageId: string,
-    message: string
-  ) => void;
+  onMessageEdit?: (messageId: string, message: string) => void;
   children?: ReactNode;
 }
 
 const CreateEditModal = memo(
   ({
-    contactId,
     messageId,
     editedMessage,
     onContactSave,
@@ -56,12 +50,12 @@ const CreateEditModal = memo(
         return;
       }
 
-      messageId && contactId
-        ? onMessageEdit?.(contactId, messageId, input)
+      messageId
+        ? onMessageEdit?.(messageId, input)
         : onContactSave?.(input, PROFILE_IMG);
 
       setIsOpen((open) => !open);
-    }, [input, onContactSave, onMessageEdit, contactId, messageId]);
+    }, [input, onContactSave, onMessageEdit, , messageId]);
 
     return (
       <>

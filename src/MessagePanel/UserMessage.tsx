@@ -8,20 +8,18 @@ import { DeleteButton, EditButton } from '../icons';
 import { Mode, timeFormatter } from '../utils';
 
 interface UserMessageProps {
-  contactId: string;
   messageId: string;
   text: string;
-  timestamp: string;
-  onMessageDelete: (contactId: string, messageId: string) => void;
-  onMessageEdit: (contactId: string, messageId: string, text: string) => void;
+  createdAt: string;
+  onMessageDelete: (messageId: string) => void;
+  onMessageEdit: (messageId: string, newText: string) => void;
 }
 
 const UserMessage = memo(
   ({
-    contactId,
     messageId,
     text,
-    timestamp,
+    createdAt,
     onMessageDelete,
     onMessageEdit,
   }: UserMessageProps) => {
@@ -34,7 +32,6 @@ const UserMessage = memo(
           <div className='flex flex-col gap-3 items-end justify-between'>
             <div className='absolute hidden group-hover:block right-0 top-0'>
               <CreateEditModal
-                contactId={contactId}
                 messageId={messageId}
                 onMessageEdit={onMessageEdit}
                 editedMessage={text}
@@ -47,8 +44,8 @@ const UserMessage = memo(
             </div>
             <div className='absolute hidden group-hover:block right-7 top-0'>
               <DeleteModal
-                contactId={contactId}
-                messageId={messageId}
+                isMessage={true}
+                contentId={messageId}
                 onDelete={onMessageDelete}
               >
                 <DeleteButton
@@ -60,7 +57,7 @@ const UserMessage = memo(
 
             {mode === Mode.Spacious && (
               <span className='text-[10px] font-poppins'>
-                {timeFormatter(timestamp)}
+                {timeFormatter(createdAt)}
               </span>
             )}
           </div>

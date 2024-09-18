@@ -24,7 +24,6 @@ const MessagePanel = memo(() => {
     <div className='container mx-auto relative h-screen bg-custom-bg bg-center bg-repeat flex flex-col'>
       <MessagePanelHeading
         name={selectedContact.name}
-        profileImg={selectedContact.profileImg}
         onChatClose={handleChatClose}
         className='sticky'
       />

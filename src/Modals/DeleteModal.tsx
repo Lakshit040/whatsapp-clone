@@ -2,17 +2,17 @@ import { ReactNode, useCallback, useState, memo } from 'react';
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 
 interface DeleteModalProps {
-  contactId?: string;
-  messageId?: string;
-  onDelete: (contactId: string, messageId: string) => void;
+  isMessage: boolean;
+  contentId: string;
+  onDelete: (contentId: string) => void;
   children?: ReactNode;
 }
 
 const DeleteModal = memo(
-  ({ contactId, messageId, onDelete, children }: DeleteModalProps) => {
+  ({ isMessage, contentId, onDelete, children }: DeleteModalProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const heading = messageId
+    const heading = isMessage
       ? 'Delete this message ?'
       : 'Delete this contact ?';
 
@@ -21,7 +21,7 @@ const DeleteModal = memo(
     }, []);
 
     const handleDelete = useCallback(() => {
-      contactId && messageId && onDelete(contactId, messageId);
+      onDelete(contentId);
       setIsOpen((open) => !open);
     }, [onDelete]);
 

@@ -4,16 +4,11 @@ import { useSelectedContact } from '../contexts/SelectedContactContext';
 
 import { DeleteButton } from '../icons';
 
-import {
-  Mode,
-  timeFormatter,
-  truncateMessage,
-  type Contact,
-  type Message,
-} from '../utils';
+import { Mode, PROFILE_IMG, timeFormatter, truncateMessage } from '../utils';
+import { Contact as ContactType, Message } from '../redux/types';
 
 interface ContactComponentProps {
-  contact: Contact;
+  contact: ContactType;
   lastMessage?: Message;
   onDelete: (contactId: string) => void;
 }
@@ -27,14 +22,13 @@ const Contact = memo(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
         onDelete(contact.id);
-        if (selectedContact && selectedContact.id === contact.id)
-          setSelectedContact(null);
+        if (selectedContact?.id === contact.id) setSelectedContact(null);
       },
       [onDelete, contact.id, selectedContact]
     );
 
     const handleContactClick = useCallback(() => {
-      if (selectedContact && selectedContact.id === contact.id) return;
+      if (selectedContact?.id === contact.id) return;
       setSelectedContact(contact);
     }, [selectedContact, contact.id]);
 
@@ -45,12 +39,12 @@ const Contact = memo(
             ? 'bg-contact-active border-[.5px] border-green-400 font-semibold'
             : ' bg-contact'
         }`}
-        title={lastMessage?.message ?? contact.name}
+        title={lastMessage?.text ?? contact.name}
         onClick={handleContactClick}
       >
         <div className='w-14 h-12 rounded-full overflow-hidden'>
           <img
-            src={contact.profileImg}
+            src={PROFILE_IMG}
             alt={contact.name}
             className='w-full h-full object-cover rounded-full'
           />
@@ -60,10 +54,10 @@ const Contact = memo(
           {mode === Mode.Spacious && lastMessage && (
             <div className='flex justify-between items-center w-full'>
               <span className='text-xs text-gray-300 '>
-                {truncateMessage(lastMessage.message)}
+                {truncateMessage(lastMessage.text)}
               </span>
               <span className='text-xs text-gray-400'>
-                {timeFormatter(lastMessage.timestamp)}
+                {timeFormatter(lastMessage.createdAt)}
               </span>
             </div>
           )}
