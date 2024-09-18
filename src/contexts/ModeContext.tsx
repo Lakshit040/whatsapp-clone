@@ -6,7 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { Mode } from '../utils';
+import { Mode } from '../types';
 
 interface ModeContextType {
   mode: Mode;
