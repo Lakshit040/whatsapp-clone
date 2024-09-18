@@ -4,7 +4,7 @@ import { SendButton } from '../icons';
 import { useDispatch } from 'react-redux';
 import { addMessage, updateLastMessage } from '../redux/reducer';
 import { generateUniqueId, timeFormatter } from '../utils';
-import { Message } from '../redux/types';
+import { Message } from '../types';
 
 interface AddMessageComponentProps {
   contactId: string;

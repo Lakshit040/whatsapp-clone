@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import truncate from 'lodash.truncate';
 import { v4 } from 'uuid';
-import { type Contact, type Message, Format } from './types';
+import { Format } from './types';
 
 export const PROFILE_IMG =
   'https://fastly.picsum.photos/id/297/200/300.jpg?hmac=SF0Y51mRP7i6CoLBIuliqQwDIUJNyf63_r3xhamVSLE';
@@ -9,24 +9,6 @@ export const PROFILE_IMG =
 export const LOCAL_STORAGE_CONTACT_KEY = 'contacts';
 
 export const LOCAL_STORAGE_MESSAGE_KEY = 'messages';
-
-export const saveContactsToStorage = (contacts: Contact[]) => {
-  localStorage.setItem(LOCAL_STORAGE_CONTACT_KEY, JSON.stringify(contacts));
-};
-
-export const loadContactsFromStorage = (): Contact[] => {
-  return JSON.parse(localStorage.getItem(LOCAL_STORAGE_CONTACT_KEY) ?? '[]');
-};
-
-export const loadMessagesFromStorage = (): Record<string, Message[]> => {
-  return JSON.parse(localStorage.getItem(LOCAL_STORAGE_MESSAGE_KEY) ?? '[]');
-};
-
-export const saveMessagesIntoStorage = (
-  messages: Record<string, Message[]>
-): void => {
-  localStorage.setItem(LOCAL_STORAGE_MESSAGE_KEY, JSON.stringify(messages));
-};
 
 export const timeFormatter = (timeStr?: string) => {
   if (timeStr) return format(new Date(timeStr), Format.Time);

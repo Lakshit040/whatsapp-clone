@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useRef } from 'react';
 
 import UserMessage from './UserMessage';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../redux/types';
+import { RootState } from '../types';
 import {
   deleteMessage,
   editMessage,
