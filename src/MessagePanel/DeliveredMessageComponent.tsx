@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef } from 'react';
+import { memo, useCallback, useRef } from 'react';
 
 import UserMessage from './UserMessage';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,11 +17,33 @@ interface DeliveredMessageComponentProps {
 const DeliveredMessageComponent = memo(
   ({ contactId }: DeliveredMessageComponentProps) => {
     const dispatch = useDispatch();
+
     const messageContainerRef = useRef<HTMLDivElement>(null);
+    const hasMounted = useRef<boolean>(false);
 
     const messages = useSelector((state: RootState) =>
       selectMessagesForContact(state, contactId)
     );
+    const previousMessageCountRef = useRef<number>(messages.length);
+
+    const scrollToBottom = useCallback(() => {
+      const container = messageContainerRef.current;
+      if (container) {
+        requestAnimationFrame(() => {
+          container.scrollTop = container.scrollHeight;
+        });
+      }
+    }, []);
+
+    const scrollToBottomIfNeeded = useCallback(() => {
+      if (!hasMounted.current) {
+        hasMounted.current = true;
+        requestAnimationFrame(scrollToBottom);
+      } else if (messages.length > previousMessageCountRef.current) {
+        requestAnimationFrame(scrollToBottom);
+      }
+      previousMessageCountRef.current = messages.length;
+    }, [messages.length, scrollToBottom]);
 
     const onMessageDelete = useCallback(
       (messageId: string) => {
@@ -59,12 +81,7 @@ const DeliveredMessageComponent = memo(
       [messages]
     );
 
-    useEffect(() => {
-      const container = messageContainerRef.current;
-      if (container) {
-        container.scrollTop = container.scrollHeight;
-      }
-    }, [messages]);
+    scrollToBottomIfNeeded();
 
     return (
       <div className='container mx-auto h-full'>
