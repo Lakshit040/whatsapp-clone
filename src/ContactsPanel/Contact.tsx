@@ -18,20 +18,20 @@ const Contact = memo(
     const { mode } = useMode();
     const { selectedContact, setSelectedContact } = useSelectedContact();
 
+    const handleContactClick = useCallback(() => {
+      if (selectedContact?.id === contact.id) return;
+      setSelectedContact(contact);
+    }, [selectedContact, contact.id]);
+
     const handleContactDelete = useCallback(
       (event: React.MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
         onDelete(contact.id);
         if (selectedContact?.id === contact.id) setSelectedContact(null);
       },
-      [onDelete, contact.id, selectedContact]
+      [selectedContact, onDelete]
     );
 
-    const handleContactClick = useCallback(() => {
-      if (selectedContact?.id === contact.id) return;
-      setSelectedContact(contact);
-    }, [selectedContact, contact.id]);
-    
     return (
       <div
         className={`relative flex items-center py-4 px-4 border-b-[.5px] border-gray-600 cursor-pointer group ${
