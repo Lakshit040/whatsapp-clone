@@ -88,3 +88,37 @@ export const usePrevious = <T,>(value: T): T | undefined => {
 
   return ref.current;
 };
+
+// bs delay ke baad hi invoke hoga hamesha and agr repeated calls h to reset ho jayega timer
+export const debounce = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+): ((...args: Parameters<T>) => void) => {
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  return (...args: Parameters<T>): void => {
+    if (timeoutId !== null) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
+
+// ek interval mei bs ek baar hi call hoga function
+export const throttle = <T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+): ((...args: Parameters<T>) => void) => {
+  let lastCall = 0;
+
+  return (...args: Parameters<T>): void => {
+    const now = new Date().getTime();
+
+    if (now - lastCall >= delay) {
+      lastCall = now;
+      func(...args);
+    }
+  };
+};
