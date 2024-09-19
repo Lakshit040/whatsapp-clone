@@ -85,7 +85,10 @@ const DeliveredMessageComponent = memo(
 
     return (
       <div className='container mx-auto h-full'>
-        <div className='h-full overflow-y-auto p-4 pb-0' ref={messageContainerRef}>
+        <div
+          className='h-full overflow-y-auto p-4 pb-0'
+          ref={messageContainerRef}
+        >
           {messages ? (
             messages.map((message) => (
               <UserMessage

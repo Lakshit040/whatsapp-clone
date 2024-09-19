@@ -1,7 +1,6 @@
 import { useCallback, memo } from 'react';
 
 import Contact from './Contact';
-import CreateEditModal from '../Modals/CreateEditModal';
 import { FaPlus } from '../icons';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,6 +8,7 @@ import { deleteContact, addContact } from '../redux/reducer';
 import { RootState } from './../types';
 import { generateUniqueId } from '../utils';
 import selectContacts from '../redux/selector';
+import CreateEditDialog from '../Modals/CreateEditDialog';
 
 const ContactList = memo(() => {
   const dispatch = useDispatch();
@@ -41,12 +41,12 @@ const ContactList = memo(() => {
         />
       ))}
       <div className='absolute bottom-8 left-4'>
-        <CreateEditModal onContactSave={handleAddNewContact}>
+        <CreateEditDialog onConfirm={handleAddNewContact}>
           <FaPlus
             className='w-6 h-6 text-white m-4'
             title='Create New Contact'
           />
-        </CreateEditModal>
+        </CreateEditDialog>
       </div>
     </div>
   );

@@ -1,12 +1,12 @@
-import { memo } from 'react';
+import { memo, useCallback } from 'react';
 import { useMode } from '../contexts/ModeContext';
 
-import CreateEditModal from '../Modals/CreateEditModal';
-import DeleteModal from '../Modals/DeleteModal';
 import { DeleteButton, EditButton } from '../icons';
 
 import { timeFormatter } from '../utils';
 import { Mode } from '../types';
+import DeleteDialog from '../Modals/DeleteDialog';
+import CreateEditDialog from '../Modals/CreateEditDialog';
 
 interface UserMessageProps {
   messageId: string;
@@ -26,34 +26,36 @@ const UserMessage = memo(
   }: UserMessageProps) => {
     const { mode } = useMode();
 
+    const handleMessageEdit = useCallback(
+      (value: string) => {
+        onMessageEdit(messageId, value);
+      },
+      [messageId, onMessageEdit]
+    );
+
     return (
       <div className='flex flex-row-reverse container py-2 relative'>
         <div className='flex items-center gap-2 shadow-xl border-[0.5px] border-gray-600 bg-green-700 rounded-lg py-2 px-3 group max-w-lg'>
           <span className='text-white font-poppins'>{text}</span>
           <div className='flex flex-col gap-3 items-end justify-between'>
             <div className='absolute hidden group-hover:block right-0 top-0'>
-              <CreateEditModal
-                messageId={messageId}
-                onMessageEdit={onMessageEdit}
-                editedMessage={text}
+              <CreateEditDialog
+                onConfirm={handleMessageEdit}
+                initialValue={text}
               >
                 <EditButton
                   className='w-4 h-4 text-gray-400 font-semibold hover:scale-110 rounded-full m-1'
                   title='Edit Message'
                 />
-              </CreateEditModal>
+              </CreateEditDialog>
             </div>
             <div className='absolute hidden group-hover:block right-7 top-0'>
-              <DeleteModal
-                isMessage={true}
-                contentId={messageId}
-                onDelete={onMessageDelete}
-              >
+              <DeleteDialog contentId={messageId} onDelete={onMessageDelete}>
                 <DeleteButton
                   className='w-4 h-4 text-gray-400 font-semibold hover:scale-110 rounded-full m-1'
                   title='Delete Message'
                 />
-              </DeleteModal>
+              </DeleteDialog>
             </div>
 
             {mode === Mode.Spacious && (

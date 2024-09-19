@@ -31,7 +31,7 @@ const Contact = memo(
       if (selectedContact?.id === contact.id) return;
       setSelectedContact(contact);
     }, [selectedContact, contact.id]);
-
+    
     return (
       <div
         className={`relative flex items-center py-4 px-4 border-b-[.5px] border-gray-600 cursor-pointer group ${
