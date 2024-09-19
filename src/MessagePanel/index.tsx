@@ -25,7 +25,7 @@ const MessagePanel = memo(() => {
       <MessagePanelHeading
         name={selectedContact.name}
         onChatClose={handleChatClose}
-        className='sticky'
+
       />
       <div className='flex-1 overflow-y-auto'>
         <DeliveredMessageComponent contactId={selectedContact.id} />

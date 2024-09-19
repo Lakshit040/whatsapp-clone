@@ -6,14 +6,13 @@ import { PROFILE_IMG } from '../utils';
 interface MessagePanelHeadingProps {
   name: string;
   onChatClose: () => void;
-  className?: string;
 }
 
 const MessagePanelHeading = memo(
-  ({ name, onChatClose, className }: MessagePanelHeadingProps) => {
+  ({ name, onChatClose }: MessagePanelHeadingProps) => {
     return (
       <div
-        className={`flex items-center justify-between py-3 px-6 border-gray-600 bg-[#32383b] ${className}`}
+        className='sticky flex items-center justify-between py-3 px-6 border-gray-600 bg-[#32383b]'
         title={name}
       >
         <div className='flex items-center'>
