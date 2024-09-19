@@ -8,7 +8,7 @@ import { deleteContact, addContact } from '../redux/reducer';
 import { RootState } from './../types';
 import { generateUniqueId } from '../utils';
 import selectContacts from '../redux/selector';
-import CreateEditDialog from '../Modals/CreateEditDialog';
+import CreateEditDialog from '../Dialogs/CreateEditDialog';
 
 const ContactList = memo(() => {
   const dispatch = useDispatch();

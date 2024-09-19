@@ -5,8 +5,8 @@ import { DeleteButton, EditButton } from '../icons';
 
 import { timeFormatter } from '../utils';
 import { Mode } from '../types';
-import DeleteDialog from '../Modals/DeleteDialog';
-import CreateEditDialog from '../Modals/CreateEditDialog';
+import DeleteDialog from '../Dialogs/DeleteDialog';
+import CreateEditDialog from '../Dialogs/CreateEditDialog';
 
 interface UserMessageProps {
   messageId: string;
