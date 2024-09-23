@@ -22,6 +22,7 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
         id: generateUniqueId(),
         text: message,
         createdAt: timeFormatter(),
+        contactId,
       };
       dispatch(
         addMessage({

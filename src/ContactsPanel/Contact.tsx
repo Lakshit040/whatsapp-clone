@@ -20,6 +20,7 @@ const Contact = memo(
 
     const handleContactClick = useCallback(() => {
       if (selectedContact?.id === contact.id) return;
+      
       setSelectedContact(contact);
     }, [selectedContact, contact.id]);
 

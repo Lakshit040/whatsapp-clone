@@ -72,6 +72,7 @@ const DeliveredMessageComponent = memo(
                 id: prevLastMsg.id,
                 createdAt: prevLastMsg.createdAt,
                 text: newText,
+                contactId,
               },
             })
           );
