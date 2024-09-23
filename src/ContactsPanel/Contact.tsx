@@ -39,7 +39,11 @@ const Contact = memo(
             ? 'bg-contact-active border-[.5px] border-green-400 font-semibold'
             : ' bg-contact'
         }`}
-        title={lastMessage?.text ?? contact.name}
+        title={
+          lastMessage?.text && lastMessage.text.length > 50
+            ? lastMessage.text
+            : contact.name
+        }
         onClick={handleContactClick}
       >
         <div className='w-14 h-12 rounded-full overflow-hidden'>
