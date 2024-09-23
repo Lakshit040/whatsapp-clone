@@ -5,17 +5,15 @@ import { FaPlus } from '../icons';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteContact, addContact } from '../redux/reducer';
-import { RootState } from './../types';
+
 import { generateUniqueId } from '../utils';
-import selectContacts from '../redux/selector';
+import { selectContacts, selectLastMessages } from '../redux/selector';
 import CreateEditDialog from '../Dialogs/CreateEditDialog';
 
 const ContactList = memo(() => {
   const dispatch = useDispatch();
   const contacts = useSelector(selectContacts);
-  const lastMessages = useSelector(
-    (state: RootState) => state.contacts.lastMessages
-  );
+  const lastMessages = useSelector(selectLastMessages);
 
   const handleAddNewContact = useCallback((name: string) => {
     dispatch(

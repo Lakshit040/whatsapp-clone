@@ -3,7 +3,7 @@ import { useCallback, useState, memo, FormEvent } from 'react';
 import { SearchButton } from '../icons';
 import FilteredOption from './FilteredOption';
 import { Contact } from '../types';
-import selectContacts from '../redux/selector';
+import { selectContacts } from '../redux/selector';
 import { useSelector } from 'react-redux';
 
 interface SearchBarProps {
