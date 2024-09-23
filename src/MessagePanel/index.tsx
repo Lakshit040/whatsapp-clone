@@ -1,9 +1,14 @@
-import { memo, useCallback } from 'react';
+import { lazy, memo, Suspense, useCallback } from 'react';
 import { useSelectedContact } from '../contexts/SelectedContactContext';
+import HeadingFallback from '../Fallbacks/HeadingFallback';
+import DeliveredMessageFallback from '../Fallbacks/DeliveredMessageFallback';
+import AddMessageFallback from '../Fallbacks/AddMessageFallback';
 
-import MessagePanelHeading from './MessagePanelHeading';
-import DeliveredMessageComponent from './DeliveredMessageComponent';
-import AddMessageComponent from './AddMessageComponent';
+const MessagePanelHeading = lazy(() => import('./MessagePanelHeading'));
+const DeliveredMessageComponent = lazy(
+  () => import('./DeliveredMessageComponent')
+);
+const AddMessageComponent = lazy(() => import('./AddMessageComponent'));
 
 const MessagePanel = memo(() => {
   const { selectedContact, setSelectedContact } = useSelectedContact();
@@ -22,16 +27,21 @@ const MessagePanel = memo(() => {
 
   return (
     <div className='container mx-auto relative h-screen bg-custom-bg bg-center bg-repeat flex flex-col'>
-      <MessagePanelHeading
-        name={selectedContact.name}
-        onChatClose={handleChatClose}
-
-      />
+      <Suspense fallback={<HeadingFallback />}>
+        <MessagePanelHeading
+          name={selectedContact.name}
+          onChatClose={handleChatClose}
+        />
+      </Suspense>
       <div className='flex-1 overflow-y-auto'>
-        <DeliveredMessageComponent contactId={selectedContact.id} />
+        <Suspense fallback={<DeliveredMessageFallback />}>
+          <DeliveredMessageComponent contactId={selectedContact.id} />
+        </Suspense>
       </div>
       <div className='w-full sticky bottom-0'>
-        <AddMessageComponent contactId={selectedContact.id} />
+        <Suspense fallback={<AddMessageFallback />}>
+          <AddMessageComponent contactId={selectedContact.id} />
+        </Suspense>
       </div>
     </div>
   );
