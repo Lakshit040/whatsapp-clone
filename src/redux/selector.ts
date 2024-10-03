@@ -13,7 +13,7 @@ const selectMessagesState = (state: RootState) => state.messages.byContactId;
 
 // Memoized selector to get messages for a specific contact
 export const selectMessagesForContact = createSelector(
-  [selectMessagesState, (state: RootState, contactId: string) => contactId],
+  [selectMessagesState, (_, contactId: string) => contactId],
   (messagesByContactId, contactId) => messagesByContactId[contactId] || []
 );
 
