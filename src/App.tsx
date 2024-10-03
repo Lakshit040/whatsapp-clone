@@ -1,11 +1,12 @@
 import ContactsPanel from './ContactsPanel';
 import ContextProviderWrapper from './ContextProviderWrapper';
+
 import MessagePanel from './MessagePanel';
 
 const App = () => {
   return (
     <ContextProviderWrapper>
-      <div className='min-w-screen min-h-screen'>
+      <div role='main' className='min-w-screen min-h-screen'>
         <div className='flex'>
           <div className='sm:w-[40%] lg:w-[25%] h-screen overflow-hidden'>
             <ContactsPanel />

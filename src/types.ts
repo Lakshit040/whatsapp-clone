@@ -3,8 +3,8 @@ export const enum Format {
   Time = 'HH:mm',
 }
 export const enum Mode {
-  Compact,
-  Spacious,
+  Compact = 'Compact',
+  Spacious = 'Spacious',
 }
 
 export interface Contact {
