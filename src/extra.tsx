@@ -1,62 +1,38 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useLayoutEffect } from 'react';
 
 type DependencyList = ReadonlyArray<any>;
 type Callback = () => void;
 
-const deepCompare = (obj1: any, obj2: any): boolean => {
-  return JSON.stringify(obj1) === JSON.stringify(obj2);
-};
-
-// to mimic constructor in class component
+// constructor runs before the render method...so used useLayoutMethod to run before the browser painting
 export const useConstructor = (callback: Callback) => {
-  const hasRun = useRef(false);
-  if (!hasRun.current) {
+  useLayoutEffect(() => {
     callback();
-    hasRun.current = true;
-  }
+  }, []);
 };
 
-// to mimic componentDidUpdate
 export const useUpdate = (callback: Callback, dependencies: DependencyList) => {
-  const hasMounted = useRef(false);
-  const prevDependencies = useRef<DependencyList>(dependencies);
-
+  const mountCheck = useRef(false);
   useEffect(() => {
-    if (hasMounted.current) {
-      const isChanged = dependencies.some(
-        (dependency, index) =>
-          !deepCompare(dependency, prevDependencies.current[index])
-      );
-
-      if (isChanged) {
-        callback();
-      }
-      prevDependencies.current = dependencies;
-    } else {
-      hasMounted.current = true;
+    if (mountCheck.current) {
+      callback();
     }
+    mountCheck.current = true;
   }, [callback, dependencies]);
 };
 
-type DiffPropsCallback<T> = (prevProps: T, nextProps: T) => void;
-
-// to mimic componentDidReceiveProps
 export const useDidReceiveProps = <T extends Record<string, any>>(
   props: T,
-  callback: DiffPropsCallback<T>
+  callback: Callback
 ): void => {
-  const prevProps = useRef<T | null>(null);
-
+  const mountCheck = useRef(false);
   useEffect(() => {
-    if (prevProps.current && !deepCompare(prevProps.current, props)) {
-      callback(prevProps.current, props);
+    if (mountCheck.current) {
+      callback();
     }
-
-    prevProps.current = props;
-  }, [props, callback]);
+    mountCheck.current = true;
+  }, [callback, props]);
 };
 
-// to hold the previous value of the variable
 export const usePrevious = <T,>(value: T, initialValue?: T): T | undefined => {
   const ref = useRef<T | undefined>(initialValue);
 
@@ -67,7 +43,6 @@ export const usePrevious = <T,>(value: T, initialValue?: T): T | undefined => {
   return ref.current;
 };
 
-// bs delay ke baad hi invoke hoga hamesha and agr repeated calls h to reset ho jayega timer
 export const debounce = <T extends (...args: any[]) => void>(
   func: T,
   delay: number
@@ -84,7 +59,6 @@ export const debounce = <T extends (...args: any[]) => void>(
   };
 };
 
-// ek interval mei bs ek baar hi call hoga function
 export const throttle = <T extends (...args: any[]) => void>(
   func: T,
   delay: number
