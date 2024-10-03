@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  renderHook,
-  act,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { ModeProvider, useMode } from '../../contexts/ModeContext';
 import { Mode } from '../../types';
 
@@ -56,35 +50,5 @@ describe('ModeContext', () => {
 
     fireEvent.click(toggleButton);
     expect(screen.getByTestId('mode-text')).toHaveTextContent(Mode.Spacious);
-  });
-});
-
-describe('useMode', () => {
-  test('provides the correct initial mode when used within ModeProvider', () => {
-    const { result } = renderHook(() => useMode(), {
-      wrapper: ModeProvider,
-    });
-
-    expect(result.current.mode).toBe(Mode.Spacious);
-  });
-
-  test('toggles mode correctly', () => {
-    const { result } = renderHook(() => useMode(), {
-      wrapper: ModeProvider,
-    });
-
-    expect(result.current.mode).toBe(Mode.Spacious);
-
-    act(() => {
-      result.current.toggleMode();
-    });
-
-    expect(result.current.mode).toBe(Mode.Compact);
-
-    act(() => {
-      result.current.toggleMode();
-    });
-
-    expect(result.current.mode).toBe(Mode.Spacious);
   });
 });
