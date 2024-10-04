@@ -1,4 +1,3 @@
-// actions.ts
 import {
   ContactActionType,
   MessageActionType,
@@ -6,7 +5,6 @@ import {
   Message,
 } from '../types';
 
-// Contact Actions
 export const addContact = (contact: Contact) => ({
   type: ContactActionType.AddContact,
   payload: contact,
@@ -22,7 +20,6 @@ export const updateLastMessage = (contactId: string, message: Message) => ({
   payload: { contactId, message },
 });
 
-// Message Actions
 export const addMessage = (contactId: string, message: Message) => ({
   type: MessageActionType.AddMessage,
   payload: { contactId, message },

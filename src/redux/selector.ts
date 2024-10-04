@@ -1,8 +1,6 @@
-// selectors.ts
 import { createSelector } from 'reselect';
 import { Message, RootState } from '../types';
 
-// Memoized selector for contacts
 export const selectContacts = createSelector(
   (state: RootState) => state.contacts.byId,
   (state: RootState) => state.contacts.allIds,
@@ -11,7 +9,6 @@ export const selectContacts = createSelector(
 
 const selectMessagesState = (state: RootState) => state.messages.byContactId;
 
-// Memoized selector to get messages for a specific contact
 export const selectMessagesForContact = createSelector(
   [selectMessagesState, (_, contactId: string) => contactId],
   (messagesByContactId, contactId) => messagesByContactId[contactId] || []

@@ -1,8 +1,6 @@
-// reducers.ts
 import { combineReducers, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Contact, Message, ContactsState, MessagesState } from '../types';
 
-// Contacts Slice
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState: {
@@ -32,7 +30,6 @@ const contactsSlice = createSlice({
   },
 });
 
-// Messages Slice
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: { byContactId: {} } as MessagesState,

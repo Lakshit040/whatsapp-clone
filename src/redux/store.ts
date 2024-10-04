@@ -1,4 +1,3 @@
-// store.ts
 import { configureStore } from '@reduxjs/toolkit';
 import rootReducer from './reducer';
 import { loadState, saveState } from '../utils';
