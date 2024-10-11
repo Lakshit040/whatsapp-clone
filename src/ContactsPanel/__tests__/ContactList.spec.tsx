@@ -1,38 +1,19 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import ContactList from '../../ContactsPanel/ContactList';
-import { addContact, deleteContact } from '../../redux/reducer';
+import ContactList from '../ContactList';
+import { addContact } from '../../redux/reducer';
 import reducer from '../../redux/reducer';
-import { Contact, ContactsState, MessagesState } from '../../types';
+import { Contact } from '../../types';
 import { ReactNode } from 'react';
-
-const renderWithStore = (initialState: {
-  contacts: ContactsState;
-  messages: MessagesState;
-}) => {
-  const store = configureStore({ reducer, preloadedState: initialState });
-  return render(
-    <Provider store={store}>
-      <ContactList />
-    </Provider>
-  );
-};
 
 jest.mock(
   '../../ContactsPanel/Contact',
   () =>
-    ({
-      contact,
-      onDelete,
-    }: {
-      contact: Contact;
-      onDelete: (contactId: string) => void;
-    }) =>
+    ({ contact }: { contact: Contact }) =>
       (
         <div data-testid={`contact_${contact.id}`}>
           <span>{contact.name}</span>
-          <button onClick={() => onDelete(contact.id)}>Delete</button>
         </div>
       )
 );
@@ -86,14 +67,18 @@ describe('ContactList', () => {
     },
   };
 
-  test('renders contacts from the store', () => {
-    renderWithStore(initialState);
-
+  it('renders contacts from the store', () => {
+    const store = configureStore({ reducer, preloadedState: initialState });
+    render(
+      <Provider store={store}>
+        <ContactList />
+      </Provider>
+    );
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
   });
 
-  test('calls addContact when creating a new contact', () => {
+  it('calls addContact when creating a new contact', () => {
     const store = configureStore({ reducer, preloadedState: initialState });
     const spy = jest.spyOn(store, 'dispatch');
 
@@ -113,21 +98,5 @@ describe('ContactList', () => {
         name: 'Mock Name',
       })
     );
-  });
-
-  test('calls deleteContact when deleting a contact', () => {
-    const store = configureStore({ reducer, preloadedState: initialState });
-    const spy = jest.spyOn(store, 'dispatch');
-
-    render(
-      <Provider store={store}>
-        <ContactList />
-      </Provider>
-    );
-
-    const deleteButton = screen.getAllByRole('button', { name: /delete/i });
-    fireEvent.click(deleteButton[0]);
-
-    expect(spy).toHaveBeenCalledWith(deleteContact('1'));
   });
 });

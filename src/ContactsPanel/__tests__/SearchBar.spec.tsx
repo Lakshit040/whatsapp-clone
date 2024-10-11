@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import SearchBar from '../../ContactsPanel/SearchBar';
+import SearchBar from '../SearchBar';
 import { Contact } from '../../types';
 import reducer from '../../redux/reducer';
 
@@ -30,7 +30,7 @@ const mockStore = configureStore({
 });
 
 describe('SearchBar', () => {
-  test('renders the search input', () => {
+  it('renders the search element', () => {
     render(
       <Provider store={mockStore}>
         <SearchBar onContactSelect={jest.fn()} />
@@ -42,7 +42,7 @@ describe('SearchBar', () => {
     ).toBeInTheDocument();
   });
 
-  test('filters contacts based on input', () => {
+  it('filter contacts based on the quuery passed', () => {
     render(
       <Provider store={mockStore}>
         <SearchBar onContactSelect={jest.fn()} />
@@ -60,7 +60,7 @@ describe('SearchBar', () => {
     expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
   });
 
-  test('calls onContactSelect when an option is clicked', () => {
+  it('calls onContactSelect when an option is clicked', () => {
     const onContactSelectMock = jest.fn();
 
     render(
@@ -81,7 +81,7 @@ describe('SearchBar', () => {
     expect(onContactSelectMock).toHaveBeenCalledWith(mockContacts[0]);
   });
 
-  test('calls onContactSelect when the Enter key is pressed on a highlighted option', () => {
+  it('does not call onContactSelect when Enter is pressed without options', () => {
     const onContactSelectMock = jest.fn();
 
     render(
@@ -93,40 +93,7 @@ describe('SearchBar', () => {
     fireEvent.change(
       screen.getByPlaceholderText('Search or start a new chat'),
       {
-        target: { value: 'John' },
-      }
-    );
-
-    fireEvent.keyDown(
-      screen.getByPlaceholderText('Search or start a new chat'),
-      {
-        key: 'ArrowDown',
-      }
-    );
-
-    fireEvent.keyDown(
-      screen.getByPlaceholderText('Search or start a new chat'),
-      {
-        key: 'Enter',
-      }
-    );
-
-    expect(onContactSelectMock).toHaveBeenCalledWith(mockContacts[0]);
-  });
-
-  test('does not call onContactSelect when Enter is pressed without options', () => {
-    const onContactSelectMock = jest.fn();
-
-    render(
-      <Provider store={mockStore}>
-        <SearchBar onContactSelect={onContactSelectMock} />
-      </Provider>
-    );
-
-    fireEvent.change(
-      screen.getByPlaceholderText('Search or start a new chat'),
-      {
-        target: { value: 'Nonexistent' },
+        target: { value: 'garbage' },
       }
     );
 

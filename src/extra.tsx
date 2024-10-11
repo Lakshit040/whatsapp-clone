@@ -3,7 +3,6 @@ import { useRef, useEffect, useLayoutEffect } from 'react';
 type DependencyList = ReadonlyArray<any>;
 type Callback = () => void;
 
-// constructor runs before the render method...so used useLayoutMethod to run before the browser painting
 export const useConstructor = (callback: Callback) => {
   useLayoutEffect(() => {
     callback();
@@ -72,5 +71,14 @@ export const throttle = <T extends (...args: any[]) => void>(
       lastCall = now;
       func(...args);
     }
+  };
+};
+
+export const sum = (value: number) => {
+  return (secondValue?: number) => {
+    if (!!secondValue) {
+      return sum(value + secondValue);
+    }
+    return value;
   };
 };

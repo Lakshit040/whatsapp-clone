@@ -1,9 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import ProfileArea from '../../ContactsPanel/ProfileArea';
+import ProfileArea from '../ProfileArea';
 import { useMode } from '../../contexts/ModeContext';
 import { Mode } from '../../types';
 
-jest.mock('../../contexts/ModeContext');
+jest.mock('../../contexts/ModeContext', () => ({
+  useMode: jest.fn(),
+}));
 
 jest.mock('../../icons', () => ({
   UserButton: (props: any) => <div data-testid='user-button' {...props} />,
@@ -19,15 +21,12 @@ jest.mock('../../icons', () => ({
 }));
 
 describe('ProfileArea', () => {
-  beforeEach(() => {
-    // Reset mock implementation before each test
-    (useMode as jest.Mock).mockReturnValue({
-      mode: Mode.Compact,
-      toggleMode: jest.fn(),
-    });
+  (useMode as jest.Mock).mockReturnValue({
+    mode: Mode.Compact,
+    toggleMode: jest.fn(),
   });
 
-  test('renders ProfileArea with Compact mode', () => {
+  it('renders ProfileArea with Compact mode', () => {
     render(<ProfileArea />);
 
     expect(screen.getByTestId('user-button')).toBeInTheDocument();
@@ -38,7 +37,7 @@ describe('ProfileArea', () => {
     expect(screen.getByTestId('option-button')).toBeInTheDocument();
   });
 
-  test('renders ProfileArea with Spacious mode', () => {
+  it('renders ProfileArea with Spacious mode', () => {
     (useMode as jest.Mock).mockReturnValue({
       mode: Mode.Spacious,
       toggleMode: jest.fn(),
@@ -54,7 +53,7 @@ describe('ProfileArea', () => {
     expect(screen.getByTestId('option-button')).toBeInTheDocument();
   });
 
-  test('calls toggleMode when mode button is clicked', () => {
+  it('calls toggleMode when mode button is clicked', () => {
     const toggleModeMock = jest.fn();
     (useMode as jest.Mock).mockReturnValue({
       mode: Mode.Compact,
@@ -67,7 +66,7 @@ describe('ProfileArea', () => {
     expect(toggleModeMock).toHaveBeenCalledTimes(1);
   });
 
-  test('calls toggleMode when collapse button is clicked', () => {
+  it('calls toggleMode when collapse button is clicked', () => {
     const toggleModeMock = jest.fn();
     (useMode as jest.Mock).mockReturnValue({
       mode: Mode.Spacious,

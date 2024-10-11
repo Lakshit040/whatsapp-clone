@@ -46,7 +46,6 @@ export const enum MessageActionType {
   DeleteMessage,
 }
 
-// Action Interfaces
 interface AddContactAction {
   type: ContactActionType.AddContact;
   payload: Contact;
@@ -88,3 +87,9 @@ export type MessagesActionTypes =
   | DeleteMessageAction;
 
 export type ActionTypes = ContactsActionTypes | MessagesActionTypes;
+
+export const enum SnackBarType {
+  Success,
+  Warning,
+  Error,
+}

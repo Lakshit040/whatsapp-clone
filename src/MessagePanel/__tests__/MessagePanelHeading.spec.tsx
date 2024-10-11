@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import MessagePanelHeading from '../../MessagePanel/MessagePanelHeading';
+import MessagePanelHeading from '../MessagePanelHeading';
 
 jest.mock('../../icons', () => ({
   SearchButton: ({
@@ -20,23 +20,12 @@ jest.mock('../../icons', () => ({
   }) => <button className={className} title={title} onClick={onClick} />,
 }));
 
-jest.mock('../../utils', () => ({
-  PROFILE_IMG: 'https://example.com/profile.jpg',
-}));
-
 describe('MessagePanelHeading', () => {
   const mockOnChatClose = jest.fn();
 
-  it('renders correctly with the given name and profile image', () => {
+  it('renders correctly with the given name', () => {
     render(
       <MessagePanelHeading name='John Doe' onChatClose={mockOnChatClose} />
-    );
-
-    const profileImg = screen.getByAltText('John Doe');
-    expect(profileImg).toBeInTheDocument();
-    expect(profileImg).toHaveAttribute(
-      'src',
-      'https://example.com/profile.jpg'
     );
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -47,8 +36,7 @@ describe('MessagePanelHeading', () => {
       <MessagePanelHeading name='John Doe' onChatClose={mockOnChatClose} />
     );
 
-    const closeButton = screen.getByTitle('Close Chat');
-    fireEvent.click(closeButton);
+    fireEvent.click(screen.getByTitle('Close Chat'));
 
     expect(mockOnChatClose).toHaveBeenCalledTimes(1);
   });

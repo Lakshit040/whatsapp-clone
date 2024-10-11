@@ -1,9 +1,9 @@
-import { render, screen, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 
 import {
   SelectedContactProvider,
   useSelectedContact,
-} from '../../contexts/SelectedContactContext';
+} from '../SelectedContactContext';
 import { Contact } from '../../types';
 
 const TestComponent = () => {
@@ -26,7 +26,7 @@ const TestComponent = () => {
 };
 
 describe('SelectedContactContext', () => {
-  test('should provide default context values', () => {
+  it('should provide default context values', () => {
     render(
       <SelectedContactProvider>
         <TestComponent />
@@ -38,16 +38,14 @@ describe('SelectedContactContext', () => {
     );
   });
 
-  test('should set selected contact', () => {
+  it('should set selected contact', () => {
     render(
       <SelectedContactProvider>
         <TestComponent />
       </SelectedContactProvider>
     );
 
-    act(() => {
-      screen.getByText('Select John Doe').click();
-    });
+    fireEvent.click(screen.getByText('Select John Doe'));
 
     expect(screen.getByTestId('selected-contact')).toHaveTextContent(
       'John Doe'

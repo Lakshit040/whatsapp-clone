@@ -5,7 +5,10 @@ export default {
     extend: {
       colors: {
         'contact-active': '#2d2e2e',
-        'contact': '#212121',
+        contact: '#212121',
+        error: '#D22B2B',
+        success: '#50C878',
+        warning: '#FDDA0D',
       },
       backgroundImage: {
         'custom-bg': "url('/whatsapp.jpg')",

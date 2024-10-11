@@ -1,70 +1,63 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import CreateEditDialog from '../../Dialogs/CreateEditDialog';
+import CreateEditDialog from '../CreateEditDialog';
 
 describe('CreateEditDialog', () => {
   const mockOnConfirm = jest.fn();
 
-  beforeEach(() => {
-    mockOnConfirm.mockClear();
-  });
-
-  test('renders button with children and opens dialog on click', () => {
+  it('renders component with children and opens dialog on click', () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
     const openButton = screen.getByText('Add Contact');
     expect(openButton).toBeInTheDocument();
-
     fireEvent.click(openButton);
 
     expect(screen.getByText('Add new Contact')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('Enter name here')).toBeInTheDocument();
   });
 
-  test('handles form submission and calls onConfirm with input value', () => {
+  it('form submission and calls onConfirm', () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
     fireEvent.click(screen.getByText('Add Contact'));
 
-    const inputElement = screen.getByPlaceholderText('Enter name here');
-    fireEvent.change(inputElement, { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByPlaceholderText('Enter name here'), {
+      target: { value: 'John Doe' },
+    });
 
-    const saveButton = screen.getByText('Save');
-    fireEvent.click(saveButton);
+    fireEvent.click(screen.getByText('Save'));
 
     expect(mockOnConfirm).toHaveBeenCalledWith('John Doe');
   });
 
-  test('does not call onConfirm when input is empty', () => {
+  it('does not call onConfirm when input is empty', () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
     fireEvent.click(screen.getByText('Add Contact'));
 
-    const saveButton = screen.getByText('Save');
-    fireEvent.click(saveButton);
+    fireEvent.click(screen.getByText('Save'));
 
     expect(mockOnConfirm).not.toHaveBeenCalled();
   });
 
-  test('closes the dialog on Cancel click', () => {
+  it('closes the dialog on Cancel click', () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
     fireEvent.click(screen.getByText('Add Contact'));
 
-    const cancelButton = screen.getByText('Cancel');
-    fireEvent.click(cancelButton);
+    fireEvent.click(screen.getByText('Cancel'));
 
     expect(screen.queryByText('Add new Contact')).not.toBeInTheDocument();
   });
 
-  test('renders with initialValue and changes placeholder text', () => {
+  it('renders with initialValue and changes placeholder text', () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm} initialValue='Hello'>
         Edit Message

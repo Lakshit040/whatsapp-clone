@@ -1,12 +1,8 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import Dialog from '../../Dialogs/Dialog';
+import Dialog from '../Dialog';
 
 describe('Dialog', () => {
   const mockOnClose = jest.fn();
-
-  beforeEach(() => {
-    mockOnClose.mockClear();
-  });
 
   const renderDialog = (isOpen: boolean) =>
     render(
@@ -17,7 +13,7 @@ describe('Dialog', () => {
       </Dialog>
     );
 
-  test('renders nothing when isOpen is false', () => {
+  it('renders nothing when isOpen is false', () => {
     renderDialog(false);
 
     expect(screen.queryByText('Modal Header')).not.toBeInTheDocument();
@@ -25,7 +21,7 @@ describe('Dialog', () => {
     expect(screen.queryByText('Modal Footer')).not.toBeInTheDocument();
   });
 
-  test('renders the dialog when isOpen is true', () => {
+  it('renders the dialog when isOpen is true', () => {
     renderDialog(true);
 
     expect(screen.getByText('Modal Header')).toBeInTheDocument();
@@ -33,7 +29,7 @@ describe('Dialog', () => {
     expect(screen.getByText('Modal Footer')).toBeInTheDocument();
   });
 
-  test('closes the dialog when clicking outside the modal', () => {
+  it('closes the dialog when clicking outside the modal', () => {
     renderDialog(true);
 
     fireEvent.click(screen.getByRole('dialog').parentElement!);
@@ -41,7 +37,7 @@ describe('Dialog', () => {
     expect(mockOnClose).toHaveBeenCalled();
   });
 
-  test('does not close the dialog when clicking inside the modal', () => {
+  it('does not close the dialog when clicking inside the modal', () => {
     renderDialog(true);
 
     fireEvent.click(screen.getByText('Modal Body'));

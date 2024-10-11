@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { ModeProvider, useMode } from '../../contexts/ModeContext';
+import { ModeProvider, useMode } from '../ModeContext';
 import { Mode } from '../../types';
 
 const TestComponent = () => {
@@ -14,7 +14,7 @@ const TestComponent = () => {
 };
 
 describe('ModeContext', () => {
-  test('renders children correctly', () => {
+  it('renders children correctly', () => {
     render(
       <ModeProvider>
         <TestComponent />
@@ -24,7 +24,7 @@ describe('ModeContext', () => {
     expect(screen.getByTestId('mode-text')).toBeInTheDocument();
   });
 
-  test('default mode is Spacious', () => {
+  it('default mode is Spacious', () => {
     render(
       <ModeProvider>
         <TestComponent />
@@ -34,7 +34,7 @@ describe('ModeContext', () => {
     expect(screen.getByTestId('mode-text')).toHaveTextContent(Mode.Spacious);
   });
 
-  test('toggles mode between Spacious and Compact', () => {
+  it('toggles mode between Spacious and Compact', () => {
     render(
       <ModeProvider>
         <TestComponent />
