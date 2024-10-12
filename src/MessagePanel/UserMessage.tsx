@@ -36,7 +36,9 @@ const UserMessage = memo(
     return (
       <div className='flex flex-row-reverse container py-2 relative'>
         <div className='flex items-center gap-2 shadow-xl border-[0.5px] border-gray-600 bg-green-700 rounded-lg py-2 px-3 group max-w-lg'>
-          <span className='text-white font-poppins'>{text}</span>
+          <span data-testid='message-txt' className='text-white font-poppins'>
+            {text}
+          </span>
           <div className='flex flex-col gap-3 items-end justify-between'>
             <div className='absolute hidden group-hover:block right-0 top-0'>
               <CreateEditDialog
@@ -44,6 +46,7 @@ const UserMessage = memo(
                 initialValue={text}
               >
                 <EditButton
+                  data-testid='edit-btn'
                   className='w-4 h-4 text-gray-400 font-semibold hover:scale-110 rounded-full m-1'
                   title='Edit Message'
                 />
@@ -52,6 +55,7 @@ const UserMessage = memo(
             <div className='absolute hidden group-hover:block right-7 top-0'>
               <DeleteDialog contentId={messageId} onDelete={onMessageDelete}>
                 <DeleteButton
+                  data-testid='delete-btn'
                   className='w-4 h-4 text-gray-400 font-semibold hover:scale-110 rounded-full m-1'
                   title='Delete Message'
                 />
@@ -59,7 +63,7 @@ const UserMessage = memo(
             </div>
 
             {mode === Mode.Spacious && (
-              <span className='text-[10px] font-poppins'>
+              <span data-testid='msg-time' className='text-[10px] font-poppins'>
                 {timeFormatter(createdAt)}
               </span>
             )}

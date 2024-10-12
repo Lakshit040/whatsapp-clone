@@ -19,7 +19,10 @@ const MessagePanel = memo(() => {
 
   if (selectedContact === null) {
     return (
-      <span className='h-screen flex items-center justify-center font-poppins lg:text-2xl'>
+      <span
+        data-testid='default-msg-panel'
+        className='h-screen flex items-center justify-center font-poppins lg:text-2xl'
+      >
         Select a conversation to get started!
       </span>
     );

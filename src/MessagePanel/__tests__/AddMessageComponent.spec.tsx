@@ -6,10 +6,6 @@ import reducer, { addMessage, updateLastMessage } from '../../redux/reducer';
 import AddMessageComponent from '../AddMessageComponent';
 import { RootState } from '../../types';
 
-jest.mock('../../icons', () => ({
-  SendButton: (props: any) => <span {...props}>Send Icon</span>,
-}));
-
 const renderWithStore = (initialState: RootState, contactId: string) => {
   const store = configureStore({ reducer, preloadedState: initialState });
   render(
@@ -40,16 +36,14 @@ describe('AddMessageComponent', () => {
   it('renders textarea and send button', () => {
     renderWithStore(initialState, contactId);
 
-    expect(
-      screen.getByPlaceholderText('Type a message here...')
-    ).toBeInTheDocument();
-    expect(screen.getByTitle('Send message')).toBeInTheDocument();
+    expect(screen.getByTestId('msg-input')).toBeInTheDocument();
+    expect(screen.getByTestId('send-btn')).toBeInTheDocument();
   });
 
   it('allows typing a message', async () => {
     renderWithStore(initialState, contactId);
 
-    const textarea = screen.getByPlaceholderText('Type a message here...');
+    const textarea = screen.getByTestId('msg-input');
     await userEvent.type(textarea, 'Hello, John!');
 
     expect(textarea).toHaveValue('Hello, John!');
@@ -59,9 +53,10 @@ describe('AddMessageComponent', () => {
     const store = renderWithStore(initialState, contactId);
     const spy = jest.spyOn(store, 'dispatch');
 
-    const textarea = screen.getByPlaceholderText('Type a message here...');
+    const textarea = screen.getByTestId('msg-input');
+
     await userEvent.type(textarea, 'Hello, John!');
-    await userEvent.click(screen.getByTitle('Send message'));
+    await userEvent.click(screen.getByTestId('send-btn'));
 
     expect(spy).toHaveBeenCalledWith(
       addMessage({
@@ -94,8 +89,8 @@ describe('AddMessageComponent', () => {
     const store = renderWithStore(initialState, contactId);
     const spy = jest.spyOn(store, 'dispatch');
 
-    const textarea = screen.getByPlaceholderText('Type a message here...');
-    await userEvent.click(screen.getByTitle('Send message'));
+    const textarea = screen.getByTestId('msg-input');
+    await userEvent.click(screen.getByTestId('send-btn'));
 
     expect(spy).not.toHaveBeenCalled();
     expect(textarea).toHaveValue('');

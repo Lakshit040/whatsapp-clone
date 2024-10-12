@@ -1,40 +1,27 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ProfileArea from '../ProfileArea';
 import { useMode } from '../../contexts/ModeContext';
 import { Mode } from '../../types';
+import userEvent from '@testing-library/user-event';
 
 jest.mock('../../contexts/ModeContext', () => ({
   useMode: jest.fn(),
 }));
 
-jest.mock('../../icons', () => ({
-  UserButton: (props: any) => <div data-testid='user-button' {...props} />,
-  MessageButton: (props: any) => (
-    <div data-testid='message-button' {...props} />
-  ),
-  OptionButton: (props: any) => <div data-testid='option-button' {...props} />,
-  ExpandButton: (props: any) => <div data-testid='expand-button' {...props} />,
-  CollapseButton: (props: any) => (
-    <div data-testid='collapse-button' {...props} />
-  ),
-  StatusButton: (props: any) => <div data-testid='status-button' {...props} />,
-}));
-
 describe('ProfileArea', () => {
-  (useMode as jest.Mock).mockReturnValue({
-    mode: Mode.Compact,
-    toggleMode: jest.fn(),
-  });
-
   it('renders ProfileArea with Compact mode', () => {
+    (useMode as jest.Mock).mockReturnValue({
+      mode: Mode.Compact,
+      toggleMode: jest.fn(),
+    });
     render(<ProfileArea />);
 
-    expect(screen.getByTestId('user-button')).toBeInTheDocument();
-    expect(screen.getByTestId('expand-button')).toBeInTheDocument();
-    expect(screen.queryByTestId('collapse-button')).toBeNull();
-    expect(screen.getByTestId('status-button')).toBeInTheDocument();
-    expect(screen.getByTestId('message-button')).toBeInTheDocument();
-    expect(screen.getByTestId('option-button')).toBeInTheDocument();
+    expect(screen.getByTestId('user-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('expand-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('collapse-btn')).toBeNull();
+    expect(screen.getByTestId('status-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('message-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('option-btn')).toBeInTheDocument();
   });
 
   it('renders ProfileArea with Spacious mode', () => {
@@ -42,18 +29,17 @@ describe('ProfileArea', () => {
       mode: Mode.Spacious,
       toggleMode: jest.fn(),
     });
-
     render(<ProfileArea />);
 
-    expect(screen.getByTestId('user-button')).toBeInTheDocument();
-    expect(screen.queryByTestId('expand-button')).toBeNull();
-    expect(screen.getByTestId('collapse-button')).toBeInTheDocument();
-    expect(screen.getByTestId('status-button')).toBeInTheDocument();
-    expect(screen.getByTestId('message-button')).toBeInTheDocument();
-    expect(screen.getByTestId('option-button')).toBeInTheDocument();
+    expect(screen.getByTestId('user-btn')).toBeInTheDocument();
+    expect(screen.queryByTestId('expand-btn')).toBeNull();
+    expect(screen.getByTestId('collapse-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('status-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('message-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('option-btn')).toBeInTheDocument();
   });
 
-  it('calls toggleMode when mode button is clicked', () => {
+  it('calls toggleMode when mode button is clicked', async () => {
     const toggleModeMock = jest.fn();
     (useMode as jest.Mock).mockReturnValue({
       mode: Mode.Compact,
@@ -62,11 +48,11 @@ describe('ProfileArea', () => {
 
     render(<ProfileArea />);
 
-    fireEvent.click(screen.getByTestId('expand-button'));
+    await userEvent.click(screen.getByTestId('expand-btn'));
     expect(toggleModeMock).toHaveBeenCalledTimes(1);
   });
 
-  it('calls toggleMode when collapse button is clicked', () => {
+  it('calls toggleMode when collapse button is clicked', async () => {
     const toggleModeMock = jest.fn();
     (useMode as jest.Mock).mockReturnValue({
       mode: Mode.Spacious,
@@ -75,7 +61,7 @@ describe('ProfileArea', () => {
 
     render(<ProfileArea />);
 
-    fireEvent.click(screen.getByTestId('collapse-button'));
+    await userEvent.click(screen.getByTestId('collapse-btn'));
     expect(toggleModeMock).toHaveBeenCalledTimes(1);
   });
 });

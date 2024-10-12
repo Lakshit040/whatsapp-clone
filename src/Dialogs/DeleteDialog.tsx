@@ -23,21 +23,26 @@ const DeleteDialog = memo(
     return (
       <>
         <button
+          data-testid='open-modal'
           className='rounded-full bg-black/20 shadow-2xl text-sm font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white duration-300 ease-in-out data-[hover]:scale-110 data-[hover]:text-gray-300'
           onClick={onToggle}
         >
           {children}
         </button>
         <Dialog isOpen={isOpen} onClose={onToggle}>
-          <Dialog.Header>Are you sure?</Dialog.Header>
+          <Dialog.Header>
+            <span data-testid='modal-header'>Are you sure?</span>
+          </Dialog.Header>
           <Dialog.Footer>
             <button
+              data-testid='delete-btn'
               onClick={handleDelete}
               className='inline-flex items-center gap-2 rounded-md bg-[#971d1d] py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#8f0f0f] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700'
             >
               Delete
             </button>
             <button
+              data-testid='cancel-btn'
               onClick={onToggle}
               className='inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700'
             >

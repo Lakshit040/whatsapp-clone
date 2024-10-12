@@ -1,6 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { ModeProvider, useMode } from '../ModeContext';
 import { Mode } from '../../types';
+import userEvent from '@testing-library/user-event';
 
 const TestComponent = () => {
   const { mode, toggleMode } = useMode();
@@ -8,7 +9,9 @@ const TestComponent = () => {
   return (
     <div>
       <span data-testid='mode-text'>{mode}</span>
-      <button onClick={toggleMode}>Toggle Mode</button>
+      <button data-testid='toggle-btn' onClick={toggleMode}>
+        Toggle Mode
+      </button>
     </div>
   );
 };
@@ -34,21 +37,21 @@ describe('ModeContext', () => {
     expect(screen.getByTestId('mode-text')).toHaveTextContent(Mode.Spacious);
   });
 
-  it('toggles mode between Spacious and Compact', () => {
+  it('toggles mode between Spacious and Compact', async () => {
     render(
       <ModeProvider>
         <TestComponent />
       </ModeProvider>
     );
 
-    const toggleButton = screen.getByText('Toggle Mode');
+    const toggleButton = screen.getByTestId('toggle-btn');
 
     expect(screen.getByTestId('mode-text')).toHaveTextContent(Mode.Spacious);
 
-    fireEvent.click(toggleButton);
+    await userEvent.click(toggleButton);
     expect(screen.getByTestId('mode-text')).toHaveTextContent(Mode.Compact);
 
-    fireEvent.click(toggleButton);
+    await userEvent.click(toggleButton);
     expect(screen.getByTestId('mode-text')).toHaveTextContent(Mode.Spacious);
   });
 });

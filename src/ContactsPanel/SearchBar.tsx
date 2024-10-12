@@ -86,6 +86,7 @@ const SearchBar = memo(({ onContactSelect }: SearchBarProps) => {
           <SearchButton className='w-5 h-5 text-gray-400' />
         </label>
         <input
+          data-testid='search-input'
           id='inputId'
           type='text'
           placeholder='Search or start a new chat'

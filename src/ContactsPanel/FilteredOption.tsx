@@ -17,6 +17,7 @@ const FilteredOption = ({
   }, [option]);
   return (
     <li
+      data-testid={option.id}
       className={`p-2 cursor-pointer hover:bg-gray-600 ${
         isHighlighted ? 'bg-gray-600' : ''
       }`}

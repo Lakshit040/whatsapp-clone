@@ -1,13 +1,14 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import FilteredOption from '../FilteredOption';
 import { Contact } from '../../types';
-
-const mockContact: Contact = {
-  id: '1',
-  name: 'John Doe',
-};
+import userEvent from '@testing-library/user-event';
 
 describe('FilteredOption', () => {
+  const mockContact: Contact = {
+    id: '1',
+    name: 'John Doe',
+  };
+
   it('renders the contact name', () => {
     render(
       <FilteredOption
@@ -17,10 +18,10 @@ describe('FilteredOption', () => {
       />
     );
 
-    expect(screen.getByText(mockContact.name)).toBeInTheDocument();
+    expect(screen.getByTestId(mockContact.id)).toBeInTheDocument();
   });
 
-  it('calls onOptionClick with the correct contact when clicked', () => {
+  it('calls onOptionClick with the correct contact when clicked', async () => {
     const onOptionClickMock = jest.fn();
 
     render(
@@ -31,7 +32,7 @@ describe('FilteredOption', () => {
       />
     );
 
-    fireEvent.click(screen.getByText(mockContact.name));
+    await userEvent.click(screen.getByTestId(mockContact.id));
 
     expect(onOptionClickMock).toHaveBeenCalledTimes(1);
     expect(onOptionClickMock).toHaveBeenCalledWith(mockContact);

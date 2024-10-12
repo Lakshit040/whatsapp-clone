@@ -60,6 +60,7 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
         className='relative flex space-x-2 w-full'
       >
         <textarea
+          data-testid='msg-input'
           className='flex-1 p-3 border border-gray-600 rounded-lg focus:outline-none resize-none placeholder:text-gray-500 font-poppins text-gray-300'
           placeholder='Type a message here...'
           value={message}
@@ -67,6 +68,7 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
           onChange={handleMessageChange}
         />
         <button
+          data-testid='send-btn'
           type='submit'
           className='absolute right-3.5 top-3.5 bg-blue-500 text-gray-300 hover:text-white p-3 rounded-full flex items-center justify-center gap-2 font-poppins'
           title='Send message'

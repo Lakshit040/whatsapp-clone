@@ -1,72 +1,71 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import CreateEditDialog from '../CreateEditDialog';
+import userEvent from '@testing-library/user-event';
 
 describe('CreateEditDialog', () => {
   const mockOnConfirm = jest.fn();
 
-  it('renders component with children and opens dialog on click', () => {
+  it('renders component with children and opens dialog on click', async () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
-    const openButton = screen.getByText('Add Contact');
+    const openButton = screen.getByTestId('open-modal');
     expect(openButton).toBeInTheDocument();
-    fireEvent.click(openButton);
+    await userEvent.click(openButton);
 
-    expect(screen.getByText('Add new Contact')).toBeInTheDocument();
-    expect(screen.getByPlaceholderText('Enter name here')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-header')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-input')).toBeInTheDocument();
   });
 
-  it('form submission and calls onConfirm', () => {
+  it('form submission and calls onConfirm', async () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
-    fireEvent.click(screen.getByText('Add Contact'));
+    await userEvent.click(screen.getByTestId('open-modal'));
 
-    fireEvent.change(screen.getByPlaceholderText('Enter name here'), {
-      target: { value: 'John Doe' },
-    });
+    await userEvent.type(screen.getByTestId('modal-input'), 'John Doe');
 
-    fireEvent.click(screen.getByText('Save'));
+    await userEvent.click(screen.getByTestId('save-btn'));
 
     expect(mockOnConfirm).toHaveBeenCalledWith('John Doe');
   });
 
-  it('does not call onConfirm when input is empty', () => {
+  it('does not call onConfirm when input is empty', async () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
-    fireEvent.click(screen.getByText('Add Contact'));
+    await userEvent.click(screen.getByTestId('open-modal'));
 
-    fireEvent.click(screen.getByText('Save'));
+    await userEvent.click(screen.getByTestId('save-btn'));
 
     expect(mockOnConfirm).not.toHaveBeenCalled();
   });
 
-  it('closes the dialog on Cancel click', () => {
+  it('closes the dialog on Cancel click', async () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm}>Add Contact</CreateEditDialog>
     );
 
-    fireEvent.click(screen.getByText('Add Contact'));
+    await userEvent.click(screen.getByTestId('open-modal'));
 
-    fireEvent.click(screen.getByText('Cancel'));
+    await userEvent.click(screen.getByTestId('cancel-btn'));
 
-    expect(screen.queryByText('Add new Contact')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('modal-header')).not.toBeInTheDocument();
   });
 
-  it('renders with initialValue and changes placeholder text', () => {
+  it('renders with initialValue and changes placeholder text', async () => {
     render(
       <CreateEditDialog onConfirm={mockOnConfirm} initialValue='Hello'>
         Edit Message
       </CreateEditDialog>
     );
 
-    fireEvent.click(screen.getByText('Edit Message'));
+    await userEvent.click(screen.getByTestId('open-modal'));
 
-    const inputElement = screen.getByPlaceholderText('Enter message here');
+    const inputElement = screen.getByTestId('modal-input');
     expect(inputElement).toBeInTheDocument();
     expect(inputElement).toHaveValue('Hello');
   });

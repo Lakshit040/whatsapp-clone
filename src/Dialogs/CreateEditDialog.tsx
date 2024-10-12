@@ -37,6 +37,7 @@ const CreateEditDialog = memo(
     return (
       <>
         <button
+          data-testid='open-modal'
           className='rounded-full bg-black/20 shadow-2xl text-sm font-medium text-white focus:outline-none data-[hover]:bg-black/30 data-[focus]:outline-1 data-[focus]:outline-white duration-300 ease-in-out data-[hover]:scale-110 data-[hover]:text-gray-300'
           onClick={onToggle}
         >
@@ -44,11 +45,14 @@ const CreateEditDialog = memo(
         </button>
         <Dialog isOpen={isOpen} onClose={onToggle}>
           <Dialog.Header>
-            {initialValue ? 'Edit your message' : 'Add new Contact'}
+            <span data-testid='modal-header'>
+              {initialValue ? 'Edit your message' : 'Add new Contact'}
+            </span>
           </Dialog.Header>
           <form onSubmit={handleSubmit}>
             <Dialog.Body>
               <input
+                data-testid='modal-input'
                 className='mt-3 block w-full rounded-lg border-none bg-white/5 py-1.5 px-3 text-sm/6 text-white focus:outline-none data-[focus]:outline-none'
                 placeholder={
                   initialValue ? 'Enter message here' : 'Enter name here'
@@ -59,12 +63,14 @@ const CreateEditDialog = memo(
             </Dialog.Body>
             <Dialog.Footer>
               <button
+                data-testid='save-btn'
                 type='submit'
                 className='inline-flex items-center gap-2 rounded-md bg-[#971d1d] py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-[#8f0f0f] data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700'
               >
                 Save
               </button>
               <button
+                data-testid='cancel-btn'
                 onClick={onToggle}
                 className='inline-flex items-center gap-2 rounded-md bg-gray-700 py-1.5 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-gray-600 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700'
               >

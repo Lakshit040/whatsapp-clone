@@ -1,20 +1,21 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-jest.mock('./ContactsPanel', () => jest.fn(() => <div>Contacts Panel</div>));
-jest.mock('./MessagePanel', () => jest.fn(() => <div>Message Panel</div>));
+jest.mock('./ContactsPanel', () =>
+  jest.fn(() => <div data-testid='contacts'>Contacts Panel</div>)
+);
+jest.mock('./MessagePanel', () =>
+  jest.fn(() => <div data-testid='messages'>Message Panel</div>)
+);
 
 describe('App Component', () => {
   it('renders ContactsPanel and MessagePanel', () => {
     render(<App />);
 
-    const mainElement = screen.getByRole('main');
-    expect(mainElement).toBeInTheDocument();
+    expect(screen.getByTestId('main')).toBeInTheDocument();
 
-    const contactsPanel = screen.getByText('Contacts Panel');
-    expect(contactsPanel).toBeInTheDocument();
+    expect(screen.getByTestId('contacts')).toBeInTheDocument();
 
-    const messagePanel = screen.getByText('Message Panel');
-    expect(messagePanel).toBeInTheDocument();
+    expect(screen.getByTestId('messages')).toBeInTheDocument();
   });
 });

@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 import {
   SelectedContactProvider,
@@ -15,6 +16,7 @@ const TestComponent = () => {
         {selectedContact ? selectedContact.name : 'No contact selected'}
       </span>
       <button
+        data-testid='select-contact'
         onClick={() =>
           setSelectedContact({ id: '1', name: 'John Doe' } as Contact)
         }
@@ -38,14 +40,14 @@ describe('SelectedContactContext', () => {
     );
   });
 
-  it('should set selected contact', () => {
+  it('should set selected contact', async () => {
     render(
       <SelectedContactProvider>
         <TestComponent />
       </SelectedContactProvider>
     );
 
-    fireEvent.click(screen.getByText('Select John Doe'));
+    await userEvent.click(screen.getByTestId('select-contact'));
 
     expect(screen.getByTestId('selected-contact')).toHaveTextContent(
       'John Doe'

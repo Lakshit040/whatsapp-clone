@@ -24,16 +24,20 @@ const MessagePanelHeading = memo(
             />
           </div>
           <div className='ml-4 flex'>
-            <span className='text-lg font-poppins'>{name}</span>
+            <span data-testid='contact-name' className='text-lg font-poppins'>
+              {name}
+            </span>
           </div>
         </div>
         <div className='flex items-center gap-4'>
           <SearchButton
+            data-testid='search-btn'
             className='w-6 h-6 text-gray-400 hover:text-white cursor-pointer'
             title='Search a message'
           />
 
           <CloseButton
+            data-testid='close-btn'
             className='w-6 h-6 text-gray-400 hover:text-white cursor-pointer'
             title='Close Chat'
             onClick={onChatClose}

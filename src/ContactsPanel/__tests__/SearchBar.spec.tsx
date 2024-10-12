@@ -1,9 +1,10 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import SearchBar from '../SearchBar';
 import { Contact } from '../../types';
 import reducer from '../../redux/reducer';
+import userEvent from '@testing-library/user-event';
 
 const mockContacts: Contact[] = [
   { id: '1', name: 'John Doe' },
@@ -37,30 +38,23 @@ describe('SearchBar', () => {
       </Provider>
     );
 
-    expect(
-      screen.getByPlaceholderText('Search or start a new chat')
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('search-input')).toBeInTheDocument();
   });
 
-  it('filter contacts based on the quuery passed', () => {
+  it('filter contacts based on the quuery passed', async () => {
     render(
       <Provider store={mockStore}>
         <SearchBar onContactSelect={jest.fn()} />
       </Provider>
     );
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Search or start a new chat'),
-      {
-        target: { value: 'John' },
-      }
-    );
+    await userEvent.type(screen.getByTestId('search-input'), 'John');
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+    expect(screen.getByTestId('1')).toBeInTheDocument();
+    expect(screen.queryByTestId('2')).not.toBeInTheDocument();
   });
 
-  it('calls onContactSelect when an option is clicked', () => {
+  it('calls onContactSelect when an option is clicked', async () => {
     const onContactSelectMock = jest.fn();
 
     render(
@@ -69,19 +63,14 @@ describe('SearchBar', () => {
       </Provider>
     );
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Search or start a new chat'),
-      {
-        target: { value: 'John' },
-      }
-    );
+    await userEvent.type(screen.getByTestId('search-input'), 'John');
 
-    fireEvent.click(screen.getByText('John Doe'));
+    await userEvent.click(screen.getByTestId('1'));
 
     expect(onContactSelectMock).toHaveBeenCalledWith(mockContacts[0]);
   });
 
-  it('does not call onContactSelect when Enter is pressed without options', () => {
+  it('does not call onContactSelect when Enter is pressed without options', async () => {
     const onContactSelectMock = jest.fn();
 
     render(
@@ -90,19 +79,9 @@ describe('SearchBar', () => {
       </Provider>
     );
 
-    fireEvent.change(
-      screen.getByPlaceholderText('Search or start a new chat'),
-      {
-        target: { value: 'garbage' },
-      }
-    );
+    await userEvent.type(screen.getByTestId('search-input'), 'garbage');
 
-    fireEvent.keyDown(
-      screen.getByPlaceholderText('Search or start a new chat'),
-      {
-        key: 'Enter',
-      }
-    );
+    await userEvent.keyboard('[Enter]');
 
     expect(onContactSelectMock).not.toHaveBeenCalled();
   });

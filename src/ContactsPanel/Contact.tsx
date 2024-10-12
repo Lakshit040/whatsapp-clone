@@ -54,10 +54,18 @@ const Contact = memo(
           />
         </div>
         <div className='ml-4 flex flex-col justify-between w-full'>
-          <span className='font-poppins'>{contact.name}</span>
+          <span data-testid={`contact_${contact.id}`} className='font-poppins'>
+            {contact.name}
+          </span>
           {mode === Mode.Spacious && lastMessage && (
-            <div className='flex justify-between items-center w-full'>
-              <span className='text-xs text-gray-300 '>
+            <div
+              data-testid='spacious'
+              className='flex justify-between items-center w-full'
+            >
+              <span
+                data-testid={`last_${lastMessage.id}`}
+                className='text-xs text-gray-300'
+              >
                 {truncateMessage(lastMessage.text)}
               </span>
               <span className='text-xs text-gray-400'>
@@ -67,6 +75,7 @@ const Contact = memo(
           )}
 
           <button
+            data-testid='delete-btn'
             className='absolute right-4 top-6 hidden group-hover:block'
             onClick={handleContactDelete}
           >

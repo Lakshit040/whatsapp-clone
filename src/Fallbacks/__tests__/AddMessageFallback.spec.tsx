@@ -1,23 +1,22 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import AddMessageFallback from '../AddMessageFallback';
 
 describe('AddMessageFallback', () => {
   it('renders the textarea and send button', () => {
     render(<AddMessageFallback />);
 
-    expect(
-      screen.getByPlaceholderText('Type a message here...')
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('add-fallback')).toBeInTheDocument();
 
-    expect(screen.getByTitle('Send message')).toBeInTheDocument();
+    expect(screen.getByTestId('send-btn')).toBeInTheDocument();
   });
 
-  it('allows text to be typed in the textarea', () => {
+  it('allows text to be typed in the textarea', async () => {
     render(<AddMessageFallback />);
 
-    const textarea = screen.getByPlaceholderText('Type a message here...');
+    const textarea = screen.getByTestId('add-fallback');
 
-    fireEvent.change(textarea, { target: { value: 'Hello World' } });
+    await userEvent.type(textarea, 'Hello World');
 
     expect(textarea).toHaveValue('Hello World');
   });

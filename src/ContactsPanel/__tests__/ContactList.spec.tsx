@@ -1,38 +1,44 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import ContactList from '../ContactList';
-import { addContact } from '../../redux/reducer';
-import reducer from '../../redux/reducer';
-import { Contact } from '../../types';
 import { ReactNode } from 'react';
+
+import ContactList from '../ContactList';
+import reducer, { addContact } from '../../redux/reducer';
+import { Contact } from '../../types';
 
 jest.mock(
   '../../ContactsPanel/Contact',
-  () =>
-    ({ contact }: { contact: Contact }) =>
-      (
-        <div data-testid={`contact_${contact.id}`}>
-          <span>{contact.name}</span>
-        </div>
-      )
+  jest.fn(() => ({ contact }: { contact: Contact }) => (
+    <div data-testid={`contact_${contact.id}`}>
+      <span>{contact.name}</span>
+    </div>
+  ))
 );
 
 jest.mock(
   '../../Dialogs/CreateEditDialog',
-  () =>
-    ({
-      onConfirm,
-      children,
-    }: {
-      children: ReactNode;
-      onConfirm: (value: string) => void;
-    }) =>
-      (
-        <div>
-          <button onClick={() => onConfirm('Mock Name')}>{children}</button>
-        </div>
-      )
+  jest.fn(
+    () =>
+      ({
+        onConfirm,
+        children,
+      }: {
+        children: ReactNode;
+        onConfirm: (value: string) => void;
+      }) =>
+        (
+          <div>
+            <button
+              data-testid='confirm-btn'
+              onClick={() => onConfirm('Mock Name')}
+            >
+              {children}
+            </button>
+          </div>
+        )
+  )
 );
 
 describe('ContactList', () => {
@@ -74,11 +80,11 @@ describe('ContactList', () => {
         <ContactList />
       </Provider>
     );
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    expect(screen.getByTestId('contact_1')).toBeInTheDocument();
+    expect(screen.getByTestId('contact_2')).toBeInTheDocument();
   });
 
-  it('calls addContact when creating a new contact', () => {
+  it('calls addContact when creating a new contact', async () => {
     const store = configureStore({ reducer, preloadedState: initialState });
     const spy = jest.spyOn(store, 'dispatch');
 
@@ -88,9 +94,7 @@ describe('ContactList', () => {
       </Provider>
     );
 
-    fireEvent.click(
-      screen.getByRole('button', { name: /create new contact/i })
-    );
+    await userEvent.click(screen.getByTestId('confirm-btn'));
 
     expect(spy).toHaveBeenCalledWith(
       addContact({

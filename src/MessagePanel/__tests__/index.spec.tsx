@@ -1,17 +1,18 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { useSelectedContact } from '../../contexts/SelectedContactContext';
 import MessagePanel from '..';
 
-jest.mock('../../MessagePanel/MessagePanelHeading', () =>
-  jest.fn(({ onChatClose }: { onChatClose: () => void }) => (
-    <div onClick={onChatClose}>Mock MessagePanelHeading</div>
+jest.mock('../../MessagePanel/DeliveredMessageComponent', () =>
+  jest.fn(() => (
+    <div data-testid='del-msg-component'>Mock DeliveredMessageComponent</div>
   ))
 );
-jest.mock('../../MessagePanel/DeliveredMessageComponent', () =>
-  jest.fn(() => <div>Mock DeliveredMessageComponent</div>)
-);
+
 jest.mock('../../MessagePanel/AddMessageComponent', () =>
-  jest.fn(() => <div>Mock AddMessageComponent</div>)
+  jest.fn(() => (
+    <div data-testid='add-msg-component'>Mock AddMessageComponent</div>
+  ))
 );
 
 jest.mock('../../contexts/SelectedContactContext', () => ({
@@ -29,9 +30,7 @@ describe('MessagePanel', () => {
 
     render(<MessagePanel />);
 
-    expect(
-      screen.getByText('Select a conversation to get started!')
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('default-msg-panel')).toBeInTheDocument();
   });
 
   it('renders lazy-loaded components when contact is selected', async () => {
@@ -42,12 +41,13 @@ describe('MessagePanel', () => {
 
     render(<MessagePanel />);
 
+    expect(screen.getByTestId('heading-fallback')).toBeInTheDocument();
+    expect(screen.getByTestId('delivered-fallback')).toBeInTheDocument();
+
     await waitFor(() => {
-      expect(screen.getByText('Mock MessagePanelHeading')).toBeInTheDocument();
-      expect(
-        screen.getByText('Mock DeliveredMessageComponent')
-      ).toBeInTheDocument();
-      expect(screen.getByText('Mock AddMessageComponent')).toBeInTheDocument();
+      expect(screen.getByTestId('contact-name')).toBeInTheDocument();
+      expect(screen.getByTestId('del-msg-component')).toBeInTheDocument();
+      expect(screen.getByTestId('add-msg-component')).toBeInTheDocument();
     });
   });
 
@@ -59,7 +59,7 @@ describe('MessagePanel', () => {
 
     render(<MessagePanel />);
 
-    fireEvent.click(screen.getByText('Mock MessagePanelHeading'));
+    await userEvent.click(screen.getByTestId('close-btn'));
 
     expect(mockSetSelectedContact).toHaveBeenCalledWith(null);
   });

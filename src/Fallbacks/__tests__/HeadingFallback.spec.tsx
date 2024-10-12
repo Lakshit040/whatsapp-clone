@@ -2,9 +2,9 @@ import { render, screen } from '@testing-library/react';
 import HeadingFallback from '../HeadingFallback';
 
 describe('HeadingFallback', () => {
-  it('renders the "Loading heading..." text', () => {
+  it('renders the fallback heading component', () => {
     render(<HeadingFallback />);
 
-    expect(screen.getByText('Loading heading...')).toBeInTheDocument();
+    expect(screen.getByTestId('heading-fallback')).toBeInTheDocument();
   });
 });

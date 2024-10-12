@@ -1,24 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import MessagePanelHeading from '../MessagePanelHeading';
-
-jest.mock('../../icons', () => ({
-  SearchButton: ({
-    className,
-    title,
-  }: {
-    className: string;
-    title: string;
-  }) => <button className={className} title={title} />,
-  CloseButton: ({
-    className,
-    title,
-    onClick,
-  }: {
-    className: string;
-    title: string;
-    onClick: () => void;
-  }) => <button className={className} title={title} onClick={onClick} />,
-}));
+import userEvent from '@testing-library/user-event';
 
 describe('MessagePanelHeading', () => {
   const mockOnChatClose = jest.fn();
@@ -28,15 +10,15 @@ describe('MessagePanelHeading', () => {
       <MessagePanelHeading name='John Doe' onChatClose={mockOnChatClose} />
     );
 
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByTestId('contact-name')).toBeInTheDocument();
   });
 
-  it('calls onChatClose when the close button is clicked', () => {
+  it('calls onChatClose when the close button is clicked', async () => {
     render(
       <MessagePanelHeading name='John Doe' onChatClose={mockOnChatClose} />
     );
 
-    fireEvent.click(screen.getByTitle('Close Chat'));
+    await userEvent.click(screen.getByTestId('close-btn'));
 
     expect(mockOnChatClose).toHaveBeenCalledTimes(1);
   });
@@ -46,6 +28,6 @@ describe('MessagePanelHeading', () => {
       <MessagePanelHeading name='John Doe' onChatClose={mockOnChatClose} />
     );
 
-    expect(screen.getByTitle('Search a message')).toBeInTheDocument();
+    expect(screen.getByTestId('search-btn')).toBeInTheDocument();
   });
 });
