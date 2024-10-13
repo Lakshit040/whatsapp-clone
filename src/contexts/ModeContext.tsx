@@ -13,7 +13,7 @@ interface ModeContextType {
   toggleMode: () => void;
 }
 
-const ModeContext = createContext<ModeContextType | undefined>(undefined);
+export const ModeContext = createContext<ModeContextType | undefined>(undefined);
 
 export const ModeProvider: React.FC<{ children: ReactNode }> = ({
   children,

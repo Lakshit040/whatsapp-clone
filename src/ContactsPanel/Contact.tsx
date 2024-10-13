@@ -34,6 +34,7 @@ const Contact = memo(
 
     return (
       <div
+        data-testid='contact'
         className={`relative flex items-center py-4 px-4 border-b-[.5px] border-gray-600 cursor-pointer group ${
           selectedContact?.id === contact.id
             ? 'bg-contact-active border-[.5px] border-green-400 font-semibold'
@@ -54,7 +55,7 @@ const Contact = memo(
           />
         </div>
         <div className='ml-4 flex flex-col justify-between w-full'>
-          <span data-testid={`contact_${contact.id}`} className='font-poppins'>
+          <span data-testid='contact-name' className='font-poppins'>
             {contact.name}
           </span>
           {mode === Mode.Spacious && lastMessage && (
@@ -62,10 +63,7 @@ const Contact = memo(
               data-testid='spacious'
               className='flex justify-between items-center w-full'
             >
-              <span
-                data-testid={`last_${lastMessage.id}`}
-                className='text-xs text-gray-300'
-              >
+              <span data-testid='last-msg' className='text-xs text-gray-300'>
                 {truncateMessage(lastMessage.text)}
               </span>
               <span className='text-xs text-gray-400'>

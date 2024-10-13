@@ -12,7 +12,7 @@ interface SelectedContactContextProps {
   setSelectedContact: (contact: Contact | null) => void;
 }
 
-const SelectedContactContext = createContext<
+export const SelectedContactContext = createContext<
   SelectedContactContextProps | undefined
 >(undefined);
 
