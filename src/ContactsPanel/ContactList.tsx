@@ -41,6 +41,7 @@ const ContactList = memo(() => {
       <div className='absolute bottom-8 left-4'>
         <CreateEditDialog onConfirm={handleAddNewContact}>
           <FaPlus
+            data-testid='create-new-contact-btn'
             className='w-6 h-6 text-white m-4'
             title='Create New Contact'
           />

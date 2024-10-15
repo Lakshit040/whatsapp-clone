@@ -81,14 +81,14 @@ describe('Contact Component', () => {
   it('calls onDelete when delete button is clicked', async () => {
     renderWithProviders({ initialSelectedContact: null });
 
-    await userEvent.click(screen.getByTestId('delete-btn'));
+    await userEvent.click(screen.getByTestId('delete-contact'));
     expect(onDeleteMock).toHaveBeenCalledWith(contact.id);
   });
 
   it('sets selected contact to null when deleted if it is the selected contact', async () => {
     renderWithProviders({ initialSelectedContact: contact });
 
-    await userEvent.click(screen.getByTestId('delete-btn'));
+    await userEvent.click(screen.getByTestId('delete-contact'));
 
     expect(onDeleteMock).toHaveBeenCalledWith(contact.id);
     expect(setSelectedContactMock).toHaveBeenCalledWith(null);

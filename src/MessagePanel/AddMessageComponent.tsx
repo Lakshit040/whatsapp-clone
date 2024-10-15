@@ -54,7 +54,10 @@ const AddMessageComponent = memo(({ contactId }: AddMessageComponentProps) => {
   );
 
   return (
-    <div className='w-full p-5 border-t-[0.5px] border-gray-600'>
+    <div
+      className='w-full p-5 border-t-[0.5px] border-gray-600'
+      data-testid='add-msg-component'
+    >
       <form
         onSubmit={handleAddMessage}
         className='relative flex space-x-2 w-full'

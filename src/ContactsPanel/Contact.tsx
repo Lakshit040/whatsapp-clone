@@ -73,7 +73,7 @@ const Contact = memo(
           )}
 
           <button
-            data-testid='delete-btn'
+            data-testid='delete-contact'
             className='absolute right-4 top-6 hidden group-hover:block'
             onClick={handleContactDelete}
           >

@@ -19,7 +19,7 @@ describe('DeleteDialog', () => {
     await userEvent.click(openButton);
 
     expect(screen.getByTestId('modal-header')).toBeInTheDocument();
-    expect(screen.getByTestId('delete-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('confirm-btn')).toBeInTheDocument();
     expect(screen.getByTestId('cancel-btn')).toBeInTheDocument();
   });
 
@@ -31,7 +31,7 @@ describe('DeleteDialog', () => {
     );
 
     await userEvent.click(screen.getByTestId('open-modal'));
-    await userEvent.click(screen.getByTestId('delete-btn'));
+    await userEvent.click(screen.getByTestId('confirm-btn'));
     expect(mockOnDelete).toHaveBeenCalledWith(contentId);
   });
 

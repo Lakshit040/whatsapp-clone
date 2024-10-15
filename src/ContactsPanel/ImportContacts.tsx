@@ -3,7 +3,10 @@ import { WifiButton, CloseButton } from '../icons';
 
 const ImportContacts = memo(() => {
   return (
-    <div className='container mx-auto p-5 bg-[#2e23c9] bg-opacity-80 relative'>
+    <div
+      className='container mx-auto p-5 bg-[#2e23c9] bg-opacity-80 relative'
+      data-testid='import-contacts'
+    >
       <div className='flex gap-1'>
         <div className='rounded-full bg-white flex justify-center items-center w-[45px] h-[45px]'>
           <WifiButton

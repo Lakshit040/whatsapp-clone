@@ -85,12 +85,15 @@ const DeliveredMessageComponent = memo(
     scrollToBottomIfNeeded();
 
     return (
-      <div className='container mx-auto h-full'>
+      <div
+        className='container mx-auto h-full'
+        data-testid='delivered-msg-component'
+      >
         <div
           className='h-full overflow-y-auto p-4 pb-0'
           ref={messageContainerRef}
         >
-          {messages ? (
+          {messages && messages.length > 0 ? (
             messages.map((message) => (
               <UserMessage
                 key={message.id}
@@ -102,7 +105,10 @@ const DeliveredMessageComponent = memo(
               />
             ))
           ) : (
-            <div className='flex justify-center items-center w-full h-full text-xl font-poppins'>
+            <div
+              className='flex justify-center items-center w-full h-full text-xl font-poppins'
+              data-testid='no-msgs'
+            >
               No Messages Yet
             </div>
           )}

@@ -16,7 +16,7 @@ const ProfileArea = memo(() => {
   const { mode, toggleMode } = useMode();
 
   return (
-    <div className='container mx-auto bg-[#32383b]'>
+    <div className='container mx-auto bg-[#32383b]' data-testid='profile-area'>
       <div className='px-5 py-4 flex justify-between items-center'>
         <UserButton
           data-testid='user-btn'

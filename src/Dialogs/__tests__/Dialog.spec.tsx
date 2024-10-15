@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import Dialog from '../Dialog';
 import userEvent from '@testing-library/user-event';
 
@@ -39,7 +39,7 @@ describe('Dialog', () => {
   it('closes the dialog when clicking outside the modal', async () => {
     renderDialog(true);
 
-    fireEvent.click(screen.getByTestId('dialog').parentElement!);
+    await userEvent.click(screen.getByTestId('dialog').parentElement!);
 
     expect(mockOnClose).toHaveBeenCalled();
   });

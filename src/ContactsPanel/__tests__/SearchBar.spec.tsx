@@ -6,31 +6,31 @@ import { Contact } from '../../types';
 import reducer from '../../redux/reducer';
 import userEvent from '@testing-library/user-event';
 
-const mockContacts: Contact[] = [
-  { id: '1', name: 'John Doe' },
-  { id: '2', name: 'Jane Smith' },
-  { id: '3', name: 'Alice Johnson' },
-];
-
-const mockStore = configureStore({
-  reducer,
-  preloadedState: {
-    contacts: {
-      byId: {
-        '1': { id: '1', name: 'John Doe' },
-        '2': { id: '2', name: 'Jane Smith' },
-        '3': { id: '3', name: 'Alice Johnson' },
-      },
-      allIds: ['1', '2', '3'],
-      lastMessages: {},
-    },
-    messages: {
-      byContactId: {},
-    },
-  },
-});
-
 describe('SearchBar', () => {
+  const mockContacts: Contact[] = [
+    { id: '1', name: 'John Doe' },
+    { id: '2', name: 'Jane Smith' },
+    { id: '3', name: 'Alice Johnson' },
+  ];
+
+  const mockStore = configureStore({
+    reducer,
+    preloadedState: {
+      contacts: {
+        byId: {
+          '1': { id: '1', name: 'John Doe' },
+          '2': { id: '2', name: 'Jane Smith' },
+          '3': { id: '3', name: 'Alice Johnson' },
+        },
+        allIds: ['1', '2', '3'],
+        lastMessages: {},
+      },
+      messages: {
+        byContactId: {},
+      },
+    },
+  });
+
   it('renders the search element', () => {
     render(
       <Provider store={mockStore}>

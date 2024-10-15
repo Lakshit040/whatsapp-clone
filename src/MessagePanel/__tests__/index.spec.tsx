@@ -1,66 +1,76 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useSelectedContact } from '../../contexts/SelectedContactContext';
+import { SelectedContactContext } from '../../contexts/SelectedContactContext';
 import MessagePanel from '..';
-
-jest.mock('../../MessagePanel/DeliveredMessageComponent', () =>
-  jest.fn(() => (
-    <div data-testid='del-msg-component'>Mock DeliveredMessageComponent</div>
-  ))
-);
-
-jest.mock('../../MessagePanel/AddMessageComponent', () =>
-  jest.fn(() => (
-    <div data-testid='add-msg-component'>Mock AddMessageComponent</div>
-  ))
-);
-
-jest.mock('../../contexts/SelectedContactContext', () => ({
-  useSelectedContact: jest.fn(),
-}));
+import { Contact, RootState } from '../../types';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+import reducer from '../../redux/reducer';
 
 describe('MessagePanel', () => {
-  const mockSetSelectedContact = jest.fn();
+  const mockContact: Contact = {
+    id: '1',
+    name: 'John Doe',
+  };
+  const setSelectedContactMock = jest.fn();
+  const initialState: RootState = {
+    contacts: {
+      byId: {
+        ['1']: mockContact,
+      },
+      allIds: ['1'],
+      lastMessages: {},
+    },
+    messages: {
+      byContactId: {
+        ['1']: [],
+      },
+    },
+  };
+
+  const renderWithProviders = (
+    initalState: RootState,
+    contact: Contact | null
+  ) => {
+    const store = configureStore({ reducer, preloadedState: initalState });
+    render(
+      <Provider store={store}>
+        <SelectedContactContext.Provider
+          value={{
+            selectedContact: contact,
+            setSelectedContact: setSelectedContactMock,
+          }}
+        >
+          <MessagePanel />
+        </SelectedContactContext.Provider>
+      </Provider>
+    );
+  };
 
   it('renders default message panel', () => {
-    (useSelectedContact as jest.Mock).mockReturnValue({
-      selectedContact: null,
-      setSelectedContact: mockSetSelectedContact,
-    });
-
-    render(<MessagePanel />);
+    renderWithProviders(initialState, null);
 
     expect(screen.getByTestId('default-msg-panel')).toBeInTheDocument();
   });
 
   it('renders lazy-loaded components when contact is selected', async () => {
-    (useSelectedContact as jest.Mock).mockReturnValue({
-      selectedContact: { id: '1', name: 'John Doe' },
-      setSelectedContact: mockSetSelectedContact,
-    });
-
-    render(<MessagePanel />);
+    renderWithProviders(initialState, mockContact);
 
     expect(screen.getByTestId('heading-fallback')).toBeInTheDocument();
     expect(screen.getByTestId('delivered-fallback')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByTestId('contact-name')).toBeInTheDocument();
-      expect(screen.getByTestId('del-msg-component')).toBeInTheDocument();
+      expect(screen.getByTestId('delivered-msg-component')).toBeInTheDocument();
       expect(screen.getByTestId('add-msg-component')).toBeInTheDocument();
     });
   });
 
   it('calls setSelectedContact with null when chat is closed', async () => {
-    (useSelectedContact as jest.Mock).mockReturnValue({
-      selectedContact: { id: '1', name: 'John Doe' },
-      setSelectedContact: mockSetSelectedContact,
-    });
-
-    render(<MessagePanel />);
+    renderWithProviders(initialState, mockContact);
 
     await userEvent.click(screen.getByTestId('close-btn'));
 
-    expect(mockSetSelectedContact).toHaveBeenCalledWith(null);
+    expect(setSelectedContactMock).toHaveBeenCalledWith(null);
   });
 });

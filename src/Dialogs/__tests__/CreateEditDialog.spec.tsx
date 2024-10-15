@@ -27,7 +27,7 @@ describe('CreateEditDialog', () => {
 
     await userEvent.type(screen.getByTestId('modal-input'), 'John Doe');
 
-    await userEvent.click(screen.getByTestId('save-btn'));
+    await userEvent.click(screen.getByTestId('confirm-btn'));
 
     expect(mockOnConfirm).toHaveBeenCalledWith('John Doe');
   });
@@ -39,7 +39,7 @@ describe('CreateEditDialog', () => {
 
     await userEvent.click(screen.getByTestId('open-modal'));
 
-    await userEvent.click(screen.getByTestId('save-btn'));
+    await userEvent.click(screen.getByTestId('confirm-btn'));
 
     expect(mockOnConfirm).not.toHaveBeenCalled();
   });

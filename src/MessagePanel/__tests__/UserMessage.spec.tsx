@@ -2,12 +2,8 @@ import { render, screen } from '@testing-library/react';
 
 import { Mode } from '../../types';
 import UserMessage from '../UserMessage';
-import { useMode } from '../../contexts/ModeContext';
+import { ModeContext } from '../../contexts/ModeContext';
 import userEvent from '@testing-library/user-event';
-
-jest.mock('../../contexts/ModeContext', () => ({
-  useMode: jest.fn(),
-}));
 
 jest.mock('../../Dialogs/DeleteDialog', () => ({ children, onDelete }: any) => (
   <div onClick={() => onDelete('test-message-id')}>{children}</div>
@@ -23,7 +19,7 @@ describe('UserMessage', () => {
   const mockOnMessageDelete = jest.fn();
   const mockOnMessageEdit = jest.fn();
 
-  const defaultProps = {
+  const userMessageProps = {
     messageId: 'test-message-id',
     text: 'Test message',
     createdAt: '2024-10-12T12:00:00Z',
@@ -31,34 +27,34 @@ describe('UserMessage', () => {
     onMessageEdit: mockOnMessageEdit,
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+  const renderUserMessage = (mode: Mode) => {
+    render(
+      <ModeContext.Provider value={{ mode: mode, toggleMode: jest.fn() }}>
+        <UserMessage {...userMessageProps} />
+      </ModeContext.Provider>
+    );
+  };
 
   it('renders the message text', () => {
-    (useMode as jest.Mock).mockReturnValue({ mode: Mode.Compact });
-    render(<UserMessage {...defaultProps} />);
+    renderUserMessage(Mode.Compact);
 
     expect(screen.getByTestId('message-txt')).toBeInTheDocument();
   });
 
   it('renders the time when mode is spacious', () => {
-    (useMode as jest.Mock).mockReturnValue({ mode: Mode.Spacious });
-    render(<UserMessage {...defaultProps} />);
+    renderUserMessage(Mode.Spacious);
 
     expect(screen.getByTestId('msg-time')).toBeInTheDocument();
   });
 
   it('does not render the time when mode is compact', () => {
-    (useMode as jest.Mock).mockReturnValue({ mode: Mode.Compact });
-    render(<UserMessage {...defaultProps} />);
+    renderUserMessage(Mode.Compact);
 
     expect(screen.queryByTestId('msg-time')).not.toBeInTheDocument();
   });
 
   it('calls onMessageEdit when the edit button is clicked', async () => {
-    (useMode as jest.Mock).mockReturnValue({ mode: Mode.Compact });
-    render(<UserMessage {...defaultProps} />);
+    renderUserMessage(Mode.Compact);
 
     await userEvent.click(screen.getByTestId('edit-btn'));
 
@@ -69,8 +65,7 @@ describe('UserMessage', () => {
   });
 
   it('calls onMessageDelete when the delete button is clicked', async () => {
-    (useMode as jest.Mock).mockReturnValue({ mode: Mode.Compact });
-    render(<UserMessage {...defaultProps} />);
+    renderUserMessage(Mode.Compact);
 
     await userEvent.click(screen.getByTestId('delete-btn'));
 

@@ -1,20 +1,20 @@
 import { render, screen } from '@testing-library/react';
 import ProfileArea from '../ProfileArea';
-import { useMode } from '../../contexts/ModeContext';
+import { ModeContext } from '../../contexts/ModeContext';
 import { Mode } from '../../types';
 import userEvent from '@testing-library/user-event';
 
-jest.mock('../../contexts/ModeContext', () => ({
-  useMode: jest.fn(),
-}));
-
 describe('ProfileArea', () => {
+  const toggleModeMock = jest.fn();
+
   it('renders ProfileArea with Compact mode', () => {
-    (useMode as jest.Mock).mockReturnValue({
-      mode: Mode.Compact,
-      toggleMode: jest.fn(),
-    });
-    render(<ProfileArea />);
+    render(
+      <ModeContext.Provider
+        value={{ mode: Mode.Compact, toggleMode: toggleModeMock }}
+      >
+        <ProfileArea />
+      </ModeContext.Provider>
+    );
 
     expect(screen.getByTestId('user-btn')).toBeInTheDocument();
     expect(screen.getByTestId('expand-btn')).toBeInTheDocument();
@@ -25,11 +25,13 @@ describe('ProfileArea', () => {
   });
 
   it('renders ProfileArea with Spacious mode', () => {
-    (useMode as jest.Mock).mockReturnValue({
-      mode: Mode.Spacious,
-      toggleMode: jest.fn(),
-    });
-    render(<ProfileArea />);
+    render(
+      <ModeContext.Provider
+        value={{ mode: Mode.Spacious, toggleMode: toggleModeMock }}
+      >
+        <ProfileArea />
+      </ModeContext.Provider>
+    );
 
     expect(screen.getByTestId('user-btn')).toBeInTheDocument();
     expect(screen.queryByTestId('expand-btn')).toBeNull();
@@ -39,27 +41,27 @@ describe('ProfileArea', () => {
     expect(screen.getByTestId('option-btn')).toBeInTheDocument();
   });
 
-  it('calls toggleMode when mode button is clicked', async () => {
-    const toggleModeMock = jest.fn();
-    (useMode as jest.Mock).mockReturnValue({
-      mode: Mode.Compact,
-      toggleMode: toggleModeMock,
-    });
-
-    render(<ProfileArea />);
+  it('calls toggleMode when expand button is clicked', async () => {
+    render(
+      <ModeContext.Provider
+        value={{ mode: Mode.Compact, toggleMode: toggleModeMock }}
+      >
+        <ProfileArea />
+      </ModeContext.Provider>
+    );
 
     await userEvent.click(screen.getByTestId('expand-btn'));
     expect(toggleModeMock).toHaveBeenCalledTimes(1);
   });
 
   it('calls toggleMode when collapse button is clicked', async () => {
-    const toggleModeMock = jest.fn();
-    (useMode as jest.Mock).mockReturnValue({
-      mode: Mode.Spacious,
-      toggleMode: toggleModeMock,
-    });
-
-    render(<ProfileArea />);
+    render(
+      <ModeContext.Provider
+        value={{ mode: Mode.Spacious, toggleMode: toggleModeMock }}
+      >
+        <ProfileArea />
+      </ModeContext.Provider>
+    );
 
     await userEvent.click(screen.getByTestId('collapse-btn'));
     expect(toggleModeMock).toHaveBeenCalledTimes(1);
